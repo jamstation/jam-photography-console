@@ -1,0 +1,101 @@
+@import '~@angular/material/_theming.scss';
+@include mat-core();
+
+// $mat-blue: (
+//   50: #607D8B,
+//   100: #607D8B,
+//   200: #607D8B,
+//   300: #607D8B,
+//   400: #607D8B,
+//   500: #607D8B,
+//   600: #607D8B,
+//   700: #607D8B,
+//   800: #607D8B,
+//   900: #607D8B,
+//   A100: #607D8B,
+//   A200: #607D8B,
+//   A400: #607D8B,
+//   A700: #607D8B,
+//   contrast: (
+//     50: $black-87-opacity,
+//     100: $black-87-opacity,
+//     200: $black-87-opacity,
+//     300: $black-87-opacity,
+//     400: $black-87-opacity,
+//     500: white,
+//     600: white,
+//     700: white,
+//     800: $white-87-opacity,
+//     900: $white-87-opacity,
+//     A100: $black-87-opacity,
+//     A200: white,
+//     A400: white,
+//     A700: white,
+//   )
+// );
+
+// $mat-orange: (
+//   50: #FF3D00,
+//   100: #FF3D00,
+//   200: #FF3D00,
+//   300: #FF3D00,
+//   400: #FF3D00,
+//   500: #FF3D00,
+//   600: #FF3D00,
+//   700: #FF3D00,
+//   800: #FF3D00,
+//   900: #FF3D00,
+//   A100: #FF3D00,
+//   A200: #FF3D00,
+//   A400: #FF3D00,
+//   A700: #FF3D00,
+//   contrast: (
+//     50: $black-87-opacity,
+//     100: $black-87-opacity,
+//     200: $black-87-opacity,
+//     300: $black-87-opacity,
+//     400: $black-87-opacity,
+//     500: white,
+//     600: white,
+//     700: white,
+//     800: $white-87-opacity,
+//     900: $white-87-opacity,
+//     A100: $black-87-opacity,
+//     A200: white,
+//     A400: white,
+//     A700: white,
+//   )
+// );
+
+$custom-theme-primary: mat-palette( $mat-blue );
+$custom-theme-accent:  mat-palette( $mat-indigo );
+$custom-theme-warn: mat-palette( $mat-red );
+
+// Create the theme object (a Sass map containing all of the palettes).
+$custom-theme: mat-light-theme( $custom-theme-primary, $custom-theme-accent, $custom-theme-warn );
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme( $custom-theme );
+
+
+$custom-typography: mat-typography-config(
+  $font-family: 'Roboto, monospace',
+  $headline: mat-typography-level(24px, 32px, 700),
+  $body-1: mat-typography-level(13px, 16px, 500)
+);
+
+// Override typography CSS classes (e.g., mat-h1, mat-display-1, mat-typography, etc.).
+@include mat-base-typography($custom-typography);
+
+// Override typography for a specific Angular Material components.
+@include mat-checkbox-typography($custom-typography);
+
+// Override typography for all Angular Material, including mat-base-typography and all components.
+@include angular-material-typography($custom-typography);
+
+@include mat-core($custom-typography);
+
+
+// #C9A690

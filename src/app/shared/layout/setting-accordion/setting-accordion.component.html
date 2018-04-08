@@ -1,0 +1,56 @@
+<mat-accordion multi="true">
+
+	<mat-expansion-panel *ngFor="let group of groups | async"
+		expanded="true">
+
+		<mat-expansion-panel-header>
+			<mat-panel-title> {{ group.groupLabel }} </mat-panel-title>
+		</mat-expansion-panel-header>
+
+		<div *ngFor="let item of ( lists | async )[group.groupIndex]"
+			class="item flex flex-start-center">
+
+			<section class="label-section"> {{ item.label }} </section>
+
+			<section class="value-section flex" [ngSwitch]="item.formControl">
+
+				<div *ngSwitchCase="'text'"
+					class="text-template flex">
+					<div class="value"> {{ item.value }} </div>
+					<button mat-button
+						class="edit-button compact-button no-focus"
+						disableRipple="true"
+						color="warn"
+						(click)="edit( displayName )">
+						<mat-icon class="small-icon"> edit </mat-icon>
+					</button>
+				</div>
+
+				<div *ngSwitchCase="'slide-toggle'"
+					class="slide-toggle-template">
+					<mat-slide-toggle></mat-slide-toggle>
+				</div>
+
+				<div *ngSwitchCase="'select'"
+					class="select-template">
+					<mat-form-field>
+						<mat-select [(value)]="item.value">
+							<mat-option *ngFor="let option of item.options" [value]="option">
+								{{ option }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+
+				<div *ngSwitchDefault
+					class="value">
+					{{ item.value }}
+				</div>
+
+			</section>
+
+		</div>
+
+	</mat-expansion-panel>
+
+</mat-accordion>

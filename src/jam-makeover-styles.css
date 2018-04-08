@@ -1,0 +1,23 @@
+button.round-button {
+	border-radius: 50%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+}
+
+.x-small-text {
+	font-size: x-small;
+}
+
+.small-text {
+	font-size: small;
+}
+
+.large-text {
+	font-size: large;
+}
+
+.x-large-text {
+	font-size: x-large;
+}

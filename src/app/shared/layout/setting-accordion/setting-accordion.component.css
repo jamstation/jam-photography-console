@@ -1,0 +1,56 @@
+:host {
+	width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+mat-accordion {
+	flex-grow: 0.6;
+}
+
+.item {
+	padding: 24px;
+	align-items: baseline;
+}
+
+.label-section {
+	width: 150px;
+    color: gray;
+	font-size: 13px;
+	font-weight: normal;
+	text-overflow: ellipsis;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.value-section {
+	flex-grow: 1;
+	text-overflow: ellipsis;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.value {
+    flex-grow: 1;
+}
+
+.text-template {
+	flex-grow: 1;
+}
+
+.text-template .edit-button {
+    align-self: flex-end;
+}
+
+@media ( max-width: 576px ) {
+
+	.item {
+		padding-left: 0px !important;
+		padding-right: 0px !important;
+	}
+
+	.label-section {
+		width: 120px !important;
+	}
+
+}

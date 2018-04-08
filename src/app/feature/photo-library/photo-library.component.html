@@ -1,0 +1,100 @@
+<jam-window title="Media Library"
+	titleIcon="add_a_photo">
+
+	<div header-template class="flex flex-start-center">
+		<section class="add-section">
+			<button mat-raised-button
+				class="add-button"
+				color="accent"
+				(click)="fileInput.click()">
+				<mat-icon class="add-button-icon"> file_upload </mat-icon>
+				<span class="add-button-text"> Add Photos </span>
+			</button>
+		</section>
+	</div>
+
+	<div content-template
+		class="content flex-vertical flex-start-center">
+
+		<input #fileInput
+			class="hide"
+			type="file"
+			accept="image/*"
+			multiple="true"
+			(change)="add( $event.target.files )" />
+
+		<mat-grid-list class="photo-grid stretch-horizontally"
+			[cols]="( gridLayoutData | async )?.cols"
+			[rowHeight]="( gridLayoutData | async )?.rowHeight"
+			gutterSize="5px">
+			<mat-grid-tile *ngFor="let photo of list | async"
+				class="tile"
+				[class.selected]="photo.selected$"
+				(click)="select( photo )">
+				<section class="photo-section stretch flex flex-center-center">
+					<div *ngIf="!photo.thumbnail" class="alt-photo stretch"></div>
+					<img *ngIf="photo.thumbnail"
+						class="photo stretch"
+						[src]="photo.thumbnail | safe: 'url'" />
+					<div *ngIf="photo.selected$" class="selected-overlay stretch"></div>
+					<div *ngIf="photo.selected$" class="selected-indicator flex flex-center-center">
+						<mat-icon class="selected-icon x-large-icon"> done </mat-icon>
+					</div>
+				</section>
+				<section *ngIf="photo.uploadInfo$ as upload"
+					class="progress-section stretch flex flex-center-center">
+					<button mat-fab *ngIf="( upload.status | async ) as uploadStatus"
+						class="progress-button large-button align-center"
+						[class.upload-complete-button]="uploadStatus == 'completed'"
+						(click)="pauseUpload( photo ); $event.stopPropagation();">
+						<mat-icon *ngIf="upload.task?.task?.snapshot.state == 'running'" class="x-large-icon"> pause </mat-icon>
+						<mat-icon *ngIf="upload.task?.task?.snapshot.state == 'paused'" class="x-large-icon"> play_arrow </mat-icon>
+						<mat-icon *ngIf="uploadStatus == 'completed'" class="x-large-icon"> done </mat-icon>
+						<span *ngIf="uploadStatus == 'errored'"> Retry </span>
+						<div class="progress-spinner-outline"></div>
+						<mat-progress-spinner *ngIf="uploadStatus == 'notStarted' || uploadStatus == 'uploading' || uploadStatus == 'completed'"
+							class="progress-spinner small-spinner"
+							[mode]="uploadStatus == 'uploading' ? 'determinate' : 'indeterminate'"
+							[value]="upload.progress | async">
+						</mat-progress-spinner>
+					</button>
+				</section>
+			</mat-grid-tile>
+		</mat-grid-list>
+	</div>
+
+	<div footer-template
+		class="footer stretch-horizontally"
+		[class.footer-selected]="( selectedPhotos | async ).length">
+		<div *ngIf="( selectedPhotos | async ).length as selectedItemsCount"
+			class="selected-section stretch-horizontally flex flex-start-center">
+			<section class="tag-section flex flex-start-center" *ngIf="false">
+				<div *ngFor="let tag of ( selectedPhotos | async )[0]?.tags"
+					class="tag flex flex-center-center">
+					<span class="tag-text"> {{ tag }} </span>
+					<span class="tag-delete-button"> x </span>
+				</div>
+			</section>
+			<button mat-icon-button
+				class="unselect-all-button"
+				(click)="unselectAll()">
+				<mat-icon> close </mat-icon>
+			</button>
+			<div class="selected-items-count large-text">
+				{{ selectedItemsCount }} selected
+			</div>
+			<div class="flex-pad"></div>
+			<button mat-icon-button
+				class="edit-button"
+				(click)="edit()">
+				<mat-icon class="edit-button-icon"> edit </mat-icon>
+			</button>
+			<button mat-icon-button
+				class="delete-button"
+				(click)="remove()">
+				<mat-icon class="delete-button-icon"> delete </mat-icon>
+			</button>
+		</div>
+	</div>
+
+</jam-window>

@@ -1,0 +1,11 @@
+<jam-window title="Profile"
+	titleIcon="account_box">
+	<div content-template
+		class="content flex-vertical flex-start-center">
+		<app-layout-setting-accordion
+			[groups]="groups"
+			[lists]="lists"
+			(edited)="edited( $event )">
+		</app-layout-setting-accordion>
+	</div>
+</jam-window>

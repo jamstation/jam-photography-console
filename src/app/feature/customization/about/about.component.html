@@ -1,0 +1,30 @@
+<jam-window title="About"
+	titleIcon="chat">
+
+	<div content-template
+		class="content flex-vertical flex-start-center">
+
+		<div class="about-label"> Say something about you. This goes right in to the about page. </div>
+
+		<mat-form-field class="about-text-box-container no-underline stretch-horizontally">
+			<textarea matInput class="about-text-box"></textarea>
+		</mat-form-field>
+
+	</div>
+
+	<div footer-template
+		class="flex flex-end-center stretch-horizontally">
+		<button mat-button
+			class="cancel-button"
+			color="primary">
+			Revert to last saved
+		</button>
+		<div class="flex-pad"></div>
+		<button mat-raised-button type="submit"
+			class="save-button"
+			color="primary">
+			Save
+		</button>
+	</div>
+
+</jam-window>

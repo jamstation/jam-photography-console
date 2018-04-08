@@ -1,0 +1,18 @@
+/* @import '~@angular/material/prebuilt-themes/purple-green.css'; */
+
+body {
+	user-select: none;
+	background-color: #f5f5f5;
+	background-color: #eeeeee;
+}
+
+.mat-snack-bar-container {
+	background-color: khaki !important;
+	color: black !important;
+	border-radius: 3px !important;
+	box-shadow: 0px 1px 4px 0 rgba( 0, 0, 0, 0.14) !important;
+}
+
+button.icon-button /deep/ mat-icon {
+	line-height: 14px;
+}

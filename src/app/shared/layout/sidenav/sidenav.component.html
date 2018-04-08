@@ -1,0 +1,23 @@
+<mat-sidenav-container class="stretch">
+	<mat-sidenav #sidenav
+		class="sidenav"
+		mode="over">
+		<main class="stretch flex-vertical">
+			<nav class="nav-list">
+				<mat-nav-list>
+					<mat-list-item *ngFor="let navItem of navList | async"
+					 	class="nav-list-item"
+						(click)="select( navItem )">
+						{{ navItem.text }}
+					</mat-list-item>
+				</mat-nav-list>
+			</nav>
+		</main>
+		<footer>
+		</footer>
+	</mat-sidenav>
+	<mat-sidenav-content>
+		<ng-content>
+		</ng-content>
+	</mat-sidenav-content>
+</mat-sidenav-container>
