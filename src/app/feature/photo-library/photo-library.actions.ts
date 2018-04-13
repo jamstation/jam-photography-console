@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Photo } from '../../shared/model';
+import { Photo, Tag } from '../../shared/model';
 import { UploadableFile } from '../../../jam/model-library';
 import { JamFirestoreBatchUploadTask } from '../../../jam/firestore-storage';
 
@@ -7,11 +7,12 @@ export const enum PhotoLibraryActionTypes
 {
 	load = '[PhotoLibrary] load',
 	loaded = '[PhotoLibrary] loaded',
+	loadTagList = '[PhotoLibrary] loadTagList',
+	tagListLoaded = '[PhotoLibrary] tagListLoaded',
 	select = '[PhotoLibrary] select',
 	unSelectAll = '[PhotoLibrary] unSelectAll',
 	edit = '[PhotoLibrary] edit',
-	edited = '[PhotoLibrary] edited',
-	editCancelled = '[PhotoLibrary] editCancelled',
+	cancelEdit = '[PhotoLibrary] cancelEdit',
 	addPhotos = '[PhotoLibrary] addPhotos',
 	generateThumbnails = '[PhotoLibrary] generateThumbnails',
 	upload = '[PhotoLibrary] upload',
@@ -42,7 +43,19 @@ export namespace PhotoLibraryAction
 	export class Loaded implements Action
 	{
 		public readonly type = PhotoLibraryActionTypes.loaded;
-		constructor ( public list: Photo[] ) { }
+		constructor ( public list: Photo[], public tagList: Tag[], public selectedList: Photo[] ) { }
+	}
+
+	export class LoadTagList implements Action
+	{
+		public readonly type = PhotoLibraryActionTypes.loadTagList;
+		constructor () { }
+	}
+
+	export class TagListLoaded implements Action
+	{
+		public readonly type = PhotoLibraryActionTypes.tagListLoaded;
+		constructor ( public tagList: Tag[] ) { }
 	}
 
 	export class Select implements Action
@@ -60,18 +73,12 @@ export namespace PhotoLibraryAction
 	export class Edit implements Action
 	{
 		public readonly type = PhotoLibraryActionTypes.edit;
-		constructor ( public item: Photo ) { }
-	}
-
-	export class Edited implements Action
-	{
-		public readonly type = PhotoLibraryActionTypes.edited;
 		constructor () { }
 	}
 
-	export class EditCancelled implements Action
+	export class CancelEdit implements Action
 	{
-		public readonly type = PhotoLibraryActionTypes.editCancelled;
+		public readonly type = PhotoLibraryActionTypes.cancelEdit;
 		constructor () { }
 	}
 
@@ -150,7 +157,7 @@ export namespace PhotoLibraryAction
 	export class Modified implements Action
 	{
 		public readonly type = PhotoLibraryActionTypes.modified;
-		constructor () { }
+		constructor ( public list: Photo[] ) { }
 	}
 
 	export class ModifyFailed implements Action
@@ -180,11 +187,12 @@ export namespace PhotoLibraryAction
 	export type All
 		= Load
 		| Loaded
+		| LoadTagList
+		| TagListLoaded
 		| Select
 		| UnSelectAll
 		| Edit
-		| Edited
-		| EditCancelled
+		| CancelEdit
 		| AddPhotos
 		| GenerateThumbnails
 		| Upload

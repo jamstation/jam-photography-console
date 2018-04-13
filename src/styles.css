@@ -6,6 +6,10 @@ body {
 	background-color: #eeeeee;
 }
 
+::selection {
+	background-color: blanchedalmond;
+}
+
 .mat-snack-bar-container {
 	background-color: khaki !important;
 	color: black !important;

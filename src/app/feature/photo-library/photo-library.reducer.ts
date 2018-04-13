@@ -5,6 +5,7 @@ import { uniqueList } from '../../../jam/function-library';
 
 const initialState: PhotoLibraryState = {
 	list: [],
+	tagList: [],
 	processing: false,
 	editing: false,
 	uploadTask: null,
@@ -26,7 +27,22 @@ export function PhotoLibraryReducer ( state = initialState, action: PhotoLibrary
 			return {
 				...state,
 				processing: false,
-				list: action.list
+				list: action.list,
+				tagList: action.tagList,
+				selectedPhotos: action.selectedList
+			};
+
+		case PhotoLibraryActionTypes.loadTagList:
+			return {
+				...state,
+				processing: true
+			};
+
+		case PhotoLibraryActionTypes.tagListLoaded:
+			return {
+				...state,
+				processing: false,
+				tagList: action.tagList
 			};
 
 		case PhotoLibraryActionTypes.select:
@@ -50,13 +66,7 @@ export function PhotoLibraryReducer ( state = initialState, action: PhotoLibrary
 				editing: true
 			};
 
-		case PhotoLibraryActionTypes.edited:
-			return {
-				...state,
-				editing: false
-			};
-
-		case PhotoLibraryActionTypes.editCancelled:
+		case PhotoLibraryActionTypes.cancelEdit:
 			return {
 				...state,
 				editing: false
@@ -105,6 +115,12 @@ export function PhotoLibraryReducer ( state = initialState, action: PhotoLibrary
 			return {
 				...state,
 				selectedPhotos: state.selectedPhotos.filter( item => item.cloudPath != action.item.cloudPath )
+			};
+
+		case PhotoLibraryActionTypes.modified:
+			return {
+				...state,
+				editing: false
 			};
 
 		default:

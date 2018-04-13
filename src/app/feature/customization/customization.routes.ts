@@ -1,9 +1,6 @@
 import { Routes } from '@angular/router';
-import { AppearanceComponent } from './appearance';
-import { AboutComponent } from './about';
+import { CustomizationComponent } from './customization.component';
 
 export const routes: Routes = [
-	{ path: '', redirectTo: 'about', pathMatch: 'full' },
-	{ path: 'appearance', component: AppearanceComponent },
-	{ path: 'about', component: AboutComponent }
+	{ path: '', component: CustomizationComponent },
 ];

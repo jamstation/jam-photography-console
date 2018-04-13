@@ -1,0 +1,95 @@
+<div class="container">
+
+	<form [formGroup]="form" novalidate
+		class="form stretch"
+		(ngSubmit)="submit()">
+
+		<div mat-dialog-title class="title flex-start-center">
+			<div> Edit Photo </div>
+			<div class="flex-pad"></div>
+			<mat-slide-toggle [checked]="formItem.live"
+				labelPosition="before"
+				(change)="formItem.live = $event.checked"> Live </mat-slide-toggle>
+		</div>
+
+		<mat-dialog-content>
+
+			<div class="form-row">
+				<div class="form-label"> Caption: </div>
+				<div class="form-element">
+					<mat-form-field class="caption">
+						<input matInput
+							class="html-form-element"
+							formControlName="caption"
+							[placeholder]="multipleSelection ? '-- Multiple --' : ''"/>
+					</mat-form-field>
+				</div>
+			</div>
+
+			<div class="form-row flex-start-center">
+				<div class="form-label flex-start-center"> Tags: </div>
+				<div class="form-element flex-center-center">
+					<mat-chip-list class="tags">
+						<mat-chip *ngFor="let tag of selectedTags"
+							(remove)="removeTag( tag )">
+							<span> {{ tag.name }} </span>
+							<mat-icon matChipRemove> cancel </mat-icon>
+						</mat-chip>
+						<mat-form-field *ngIf="filteredTagList.length" class="add-tag-form-field no-underline compact flex-start-center"
+							style="width: 25px; height: 38px; align-self: center"
+							[style.marginLeft]="tagList.length == 0 ? '0px' : '10px'">
+							<mat-select class="no-arrow" style="width: 50px" #tagSelect
+								(selectionChange)="addTag( $event.value )"
+								[value]="dummyTag">
+								<mat-select-trigger class="add-tag-trigger flex-center-center fit-content"
+									style="padding: 2px; background: darkslategray; border-radius: 50%">
+									<mat-icon class="add-tag-icon small-icon" style="color: white;"> add </mat-icon>
+								</mat-select-trigger>
+								<mat-option [value]="dummyTag" class="remove">
+								</mat-option>
+								<mat-option *ngFor="let tag of filteredTagList" [value]="tag">
+									{{ tag.name }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</mat-chip-list>
+
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-label"> Description: </div>
+				<div class="form-element">
+					<mat-form-field class="description">
+						<textarea matInput
+							class="html-form-element"
+							formControlName="description"
+							[placeholder]="multipleSelection ? '-- Multiple --' : 'Write about the photo ...'">
+						</textarea>
+					</mat-form-field>
+				</div>
+			</div>
+
+		</mat-dialog-content>
+
+		<mat-dialog-actions align="end">
+
+			<button mat-button
+				class="cancel-button"
+				color="primary"
+				type="button"
+				(click)="cancel()">
+				Cancel
+			</button>
+			<button mat-raised-button
+				class="save-button"
+				color="primary"
+				type="submit">
+				Save
+			</button>
+
+		</mat-dialog-actions>
+
+	</form>
+
+</div>

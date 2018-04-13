@@ -1,0 +1,35 @@
+<jam-window title="Tags"
+	titleIcon="local_offer">
+
+	<div header-template class="flex flex-start-center">
+		<button mat-raised-button
+			color="accent"
+			(click)="create( tag )">
+			<mat-icon> add </mat-icon>
+			<span> Add Tag </span>
+		</button>
+	</div>
+
+	<div content-template
+		class="content stretch-horizontally-90 flex-vertical flex-start-center">
+
+		<mat-list class="tag-list stretch-horizontally">
+			<mat-list-item *ngFor="let tag of list | async"
+				class="tag-list-item"
+				[class.last-modified-item-animation]="lastModifiedItem && tag.key == lastModifiedItem.key"
+				(click)="edit( tag )">
+				<h4 mat-line> {{ tag.name }} </h4>
+				<button mat-icon-button
+					(click)="remove( tag ); $event.stopPropagation();">
+					<mat-icon mat-list-icon> delete </mat-icon>
+				</button>
+			</mat-list-item>
+		</mat-list>
+
+	</div>
+
+	<div footer-template
+		class="footer stretch-horizontally">
+	</div>
+
+</jam-window>

@@ -35,7 +35,8 @@ export class PhotoLibraryService
 				return {
 					name: file.name,
 					cloudPath: cloudPath,
-					tags: [ 'new' ],
+					tagKeys: [],
+					tags: [],
 					live: false,
 					uploadInfo$: {
 						localCopy: file,

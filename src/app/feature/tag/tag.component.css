@@ -1,0 +1,48 @@
+:host {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.tag-list {
+	max-width: 500px;
+}
+
+.tag-list-item {
+	margin-top: 20px;
+	padding: 15px 20px;
+	border-radius: 5px;
+	box-shadow: 4px 4px 20px -6px rgba( 0, 0, 0, 0.1 );
+	background-color: white;
+}
+
+.tag-list-item:first-child {
+	margin-top: 0px;
+}
+
+.tag-list-item:hover {
+	background-color: antiquewhite;
+}
+
+
+.last-modified-item-animation {
+	animation-name: last-modified-item-animation;
+	animation-duration: 2s;
+	animation-timing-function: ease-out;
+}
+
+@keyframes last-modified-item-animation {
+	0% { background-color: white }
+	50% { background-color: mediumseagreen }
+	100% { background-color: white }
+}
+
+.footer {
+	height: 50px;
+}
+
+@media ( max-width: 576px ) {
+
+}

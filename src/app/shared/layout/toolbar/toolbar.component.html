@@ -1,28 +1,4 @@
 <div [class.overlay]="toolbarOpen"></div>
-<!-- <mat-toolbar class="mat-toolbar-sleek mat-toolbar-no-padding floating-box">
-	<mat-toolbar-row class="menu"
-		[class.expand]="toolbarOpen"
-		(click)="toolbarOpen = !toolbarOpen;">
-		<button mat-icon-button
-			class="menu-button"
-			(click)="menuClick()">
-			<mat-icon> menu </mat-icon>
-		</button>
-		<div class="title stretch flex flex-center-center">
-			{{ companyTitle | async }}
-		</div>
-		<button mat-icon-button
-			class="profile-button"
-			(click)="goto('profile'); $event.stopPropagation();">
-			<mat-icon color="primary"> account_circle </mat-icon>
-		</button>
-	</mat-toolbar-row>
-	<mat-toolbar-row class="sub-menu">
-		<div class="nav-link" (click)="toolbarOpen = false"> Media Library </div>
-		<div class="nav-link" (click)="toolbarOpen = false"> Customization </div>
-		<div class="nav-link" (click)="toolbarOpen = false"> Settings </div>
-  	</mat-toolbar-row>
-</mat-toolbar> -->
 <mat-expansion-panel
 	class="floating-box stretch-horizontally"
 	hideToggle="true"
@@ -30,28 +6,40 @@
 	(opened)="toolbarOpen = true"
 	(closed)="toolbarOpen = false">
 
-	<mat-expansion-panel-header collapsedHeight="30px">
+	<mat-expansion-panel-header [collapsedHeight]="( screenSize | async ) == 'xs' ? '40px' : '30px'">
 
 		<mat-panel-title class="flex-space-between-center">
-			<button mat-icon-button
-				class="menu-button">
-				<mat-icon> {{ toolbarOpen ? 'close' : 'menu' }} </mat-icon>
-			</button>
-			<span class="title small-text"> {{ companyTitle | async }} </span>
-			<button mat-icon-button
-				class="profile-button"
-				(click)="goto('profile'); $event.stopPropagation();">
-				<mat-icon color="primary"> account_circle </mat-icon>
-			</button>
+			<div class="left-section flex">
+				<button mat-icon-button
+					class="menu-button">
+					<mat-icon> {{ toolbarOpen ? 'close' : 'menu' }} </mat-icon>
+				</button>
+				<!-- <div class="left-pad"></div> -->
+			</div>
+			<div class="title-section">
+				<span class="title small-text"> {{ companyTitle | async }} </span>
+			</div>
+			<div class="right-section">
+				<!-- <button mat-icon-button
+					class="settings-button"
+					(click)="goto( pages.settings ); $event.stopPropagation();">
+					<mat-icon color="primary"> settings </mat-icon>
+				</button> -->
+				<button mat-icon-button
+					class="profile-button"
+					(click)="goto( pages.profile ); $event.stopPropagation();">
+					<mat-icon color="primary"> account_circle </mat-icon>
+				</button>
+			</div>
 		</mat-panel-title>
 
 	</mat-expansion-panel-header>
 
-	<div class="panel-body stretch flex flex-center-center"
+	<div class="menu stretch flex flex-center-center"
 		(click)="toolbarOpen = false">
 		<div class="nav-link" (click)="goto( pages.photoLibrary )"> Media Library </div>
+		<div class="nav-link" (click)="goto( pages.tag )"> Tags </div>
 		<div class="nav-link" (click)="goto( pages.customization )"> Customization </div>
-		<div class="nav-link" (click)="goto( pages.settings )"> Settings </div>
 	</div>
 
 </mat-expansion-panel>

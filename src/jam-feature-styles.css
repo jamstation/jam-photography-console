@@ -18,15 +18,23 @@
 }
 
 .show {
-	visibility: visible;
+	visibility: visible !important;
 }
 
 .hide {
-	visibility: hidden;
+	visibility: hidden !important;
+}
+
+.collapse {
+	visibility: collapse !important;
+}
+
+.add {
+	display: initial !important;
 }
 
 .remove {
-	visibility: collapse;
+	display: none !important;
 }
 
 .blue-tint:before {

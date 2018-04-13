@@ -1,74 +1,41 @@
 @import '~@angular/material/_theming.scss';
 @include mat-core();
 
-// $mat-blue: (
-//   50: #607D8B,
-//   100: #607D8B,
-//   200: #607D8B,
-//   300: #607D8B,
-//   400: #607D8B,
-//   500: #607D8B,
-//   600: #607D8B,
-//   700: #607D8B,
-//   800: #607D8B,
-//   900: #607D8B,
-//   A100: #607D8B,
-//   A200: #607D8B,
-//   A400: #607D8B,
-//   A700: #607D8B,
-//   contrast: (
-//     50: $black-87-opacity,
-//     100: $black-87-opacity,
-//     200: $black-87-opacity,
-//     300: $black-87-opacity,
-//     400: $black-87-opacity,
-//     500: white,
-//     600: white,
-//     700: white,
-//     800: $white-87-opacity,
-//     900: $white-87-opacity,
-//     A100: $black-87-opacity,
-//     A200: white,
-//     A400: white,
-//     A700: white,
-//   )
-// );
+$mat-mediumseagreen: (
+    50 : #e8f6ee,
+    100 : #c5e8d4,
+    200 : #9ed9b8,
+    300 : #77ca9c,
+    400 : #59be86,
+    500 : #3cb371,
+    600 : #36ac69,
+    700 : #2ea35e,
+    800 : #279a54,
+    900 : #1a8b42,
+    A100 : #c3ffd6,
+    A200 : #90ffb4,
+    A400 : #5dff91,
+    A700 : #43ff80,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
 
-// $mat-orange: (
-//   50: #FF3D00,
-//   100: #FF3D00,
-//   200: #FF3D00,
-//   300: #FF3D00,
-//   400: #FF3D00,
-//   500: #FF3D00,
-//   600: #FF3D00,
-//   700: #FF3D00,
-//   800: #FF3D00,
-//   900: #FF3D00,
-//   A100: #FF3D00,
-//   A200: #FF3D00,
-//   A400: #FF3D00,
-//   A700: #FF3D00,
-//   contrast: (
-//     50: $black-87-opacity,
-//     100: $black-87-opacity,
-//     200: $black-87-opacity,
-//     300: $black-87-opacity,
-//     400: $black-87-opacity,
-//     500: white,
-//     600: white,
-//     700: white,
-//     800: $white-87-opacity,
-//     900: $white-87-opacity,
-//     A100: $black-87-opacity,
-//     A200: white,
-//     A400: white,
-//     A700: white,
-//   )
-// );
-
-$custom-theme-primary: mat-palette( $mat-blue );
-$custom-theme-accent:  mat-palette( $mat-indigo );
+$custom-theme-primary: mat-palette( $mat-indigo );
+$custom-theme-accent:  mat-palette( $mat-mediumseagreen );
 $custom-theme-warn: mat-palette( $mat-red );
 
 // Create the theme object (a Sass map containing all of the palettes).

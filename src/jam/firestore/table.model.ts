@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { map, first, switchMap, tap } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { WriteBatch, WhereFilterOp } from '@firebase/firestore-types';
-import { filterObject, concatObservablesToArray } from '../function-library';
+import { concatObservablesToArray, filterObject, filterOutObjectByValue } from '../function-library';
 import { FirestoreData, TableBase } from "../../jam/model-library";
 
 export class Table<T extends FirestoreData = FirestoreData> implements TableBase
@@ -141,8 +141,11 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
      */
     public removeVmColumns ( item: T ): Partial<T>
     {
-        return filterObject<T>( item, ( data, column ) =>
-            ( data[ column + 'Key' ] === undefined ) && !( column.endsWith( '$' ) ) );
+        return filterObject<T>( item, ( val, column, data ) =>
+            ( data[ column + 'Key' ] === undefined )
+            && ( data[ column.slice( 0, column.length - 1 ) + 'Keys' ] === undefined )
+            && !( column.endsWith( '$' ) )
+        );
     }
 
     public insert ( item: T ): Observable<T>
@@ -152,18 +155,14 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
         item = this.removeVmColumns( item ) as T;
 
-        let key$ = Observable.of( null ).pipe(
-            switchMap( () => item.key
-                ? this.lookup( item.key ).pipe(
-                    switchMap( existingItem => existingItem
-                        ? Observable.fromPromise( this.collection.doc( item.key ).set( item ) ).pipe(
-                            map( () => item.key )
-                        )
-                        : Observable.of<string>( null ) ) )
-                : Observable.fromPromise( this.collection.add( item ) ).pipe(
-                    map( docRef => docRef.id )
-                ) )
-        );
+        let key$ = item.key
+            ? this.lookup( item.key ).pipe(
+                switchMap( existingItem => existingItem
+                    ? Observable.fromPromise( this.collection.doc( item.key ).set( item ) ).pipe(
+                        map( () => item.key ) )
+                    : Observable.of<string>( null ) ) )
+            : Observable.fromPromise( this.collection.add( item ) ).pipe(
+                map( docRef => docRef.id ) );
 
         return key$.pipe(
             switchMap( key => !key
@@ -194,7 +193,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
     public update ( item: T, searchKey?: any, searchColumn?: keyof T ): Observable<T>
     {
         if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] update', item );
-        if ( !item ) return null;
+        if ( !item ) return Observable.of<T>( null );
         /**
          * You can lookup via key or other columns.
          * Lookup via key - item.key
@@ -214,8 +213,9 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
                  * If search key was used, we cannot guarantee item key will be present,
                  * hence get it from looked up item
                  */
-                : Observable.fromPromise( this.collection.doc( existingItem.key ).set( Object.assign( item, { key: item.key || existingItem.key } ) ) ).pipe(
-                    switchMap( () => this.get( existingItem.key ).pipe( first() ) ) ) ) );
+                : Observable.fromPromise( this.collection.doc( existingItem.key )
+                    .set( Object.assign( item, { key: item.key || existingItem.key } ) ) ).pipe(
+                        switchMap( () => this.get( existingItem.key ).pipe( first() ) ) ) ) );
 
     }
 
@@ -228,17 +228,46 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
                 : this.insert( item ) ) );
     }
 
+    private validateAndFetchExistingItem ( item: T, searchKey?: any, searchColumn?: keyof T ): Observable<T>
+    {
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] data to be written', item );
+
+        /**
+         * if no item provided return immediately
+         */
+        if ( !item ) return Observable.of<T>( null );
+
+        /**
+         * You can lookup via key or other columns
+         * Lookup via key - item.key
+         * Lookup via columns - searchKey
+         */
+        searchKey = searchKey || item.key;
+        if ( !searchKey ) return Observable.of<T>( null );
+
+        /**
+         * Remove view model columns
+         */
+        item = this.removeVmColumns( item ) as T;
+
+        /**
+         * Get existing item
+         */
+        return this.lookup( searchKey, searchColumn );
+    }
+
     public updateFields ( item: T, searchKey?: any, searchColumn?: keyof T ): Observable<T>
     {
         if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] update-fields', item );
-        if ( !item ) return null;
+        if ( !item ) return Observable.of<T>( null );
         /**
-         * You can lookup via key or other columns.
+         * You can lookup via key or other columns
          * Lookup via key - item.key
-         * Lookup via columns - searchKey.
+         * Lookup via columns - searchKey
          */
         item = this.removeVmColumns( item ) as T;
         searchKey = searchKey || item.key;
+        if ( !searchKey ) return Observable.of<T>( null );
 
         /**
          * Remove empty fields and prepare new object with fields to be updated
@@ -258,24 +287,41 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
                     switchMap( () => this.get( existingItem.key ).pipe( first() ) ) ) ) );
     }
 
+    public updateFieldsMany ( list: T[], searchColumn?: keyof T ): Observable<T[]>
+    {
+        const existingItemsObservables = list.map( item =>
+            this.validateAndFetchExistingItem( item, item[ searchColumn ], searchColumn ) );
+
+        return concatObservablesToArray( existingItemsObservables ).pipe(
+            map( existingItems => existingItems
+                .filter( eItem => !!eItem )
+                .map( ( eItem, i ) => list[ i ] ) ),
+            map( newList => ( {
+                newList: newList,
+                batch: newList.map( item => filterOutObjectByValue( item, [ null, undefined ] ) )
+                    .reduce( ( batch: WriteBatch, item ) => batch.update( this.collection.doc( item.key ).ref, item )
+                        , this.db.firestore.batch() )
+            } ) ),
+            switchMap( result => Observable.fromPromise( result.batch.commit() ).pipe( map( () => result.newList ) ) ) );
+    }
+
     public remove ( searchKey: any, searchColumn?: keyof T ): Observable<T>
     {
+
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] delete', searchColumn, searchKey );
 
         if ( !searchKey ) return Observable.of<T>( null );
         /**
          * Get existing item
          * Exit this function if existing item is not found
          */
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] delete', searchColumn, searchKey );
         return this.lookup( searchKey, searchColumn ).pipe(
             switchMap( existingItem => !existingItem
-                /* Delete failed since existing item not found. Send 'false' signal */
-                ? Observable.of( false )
-                /* Delete succeeded. Send 'true' signal */
+                /* Delete failed since existing item not found. Return 'null' to indicate 'no item deleted' */
+                ? Observable.of( null )
+                /* Delete succeeded. Return existingItem as itemDeleted */
                 : Observable.fromPromise( this.collection.doc( existingItem.key ).delete() ).pipe(
-                    map( () => true ) ),
-                /* If signal is 'true', send deleted item ( found in lookup ) */
-                ( outerValue, innerValue ) => innerValue ? outerValue : null ) );
+                    map( () => existingItem ) ) ) );
 
     }
 

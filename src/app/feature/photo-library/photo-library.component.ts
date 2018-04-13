@@ -1,12 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { map, withLatestFrom, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { MatGridData, UploadStatuses, ScreenSizes } from '../../../jam/model-library';
+import { MatGridData, ScreenSizes } from '../../../jam/model-library';
 import { Photo } from '../../shared/model';
 import { PhotoLibraryModuleState, PhotoLibraryAction } from './photo-library.store';
 import { PhotoLibraryService } from './photo-library.service';
-import { readImage, resizeImage } from '../../../jam/function-library';
 
 @Component( {
 	selector: 'app-photo-library',
@@ -28,12 +27,13 @@ export class PhotoLibraryComponent implements OnInit
 		 * Store Selects
 		 */
 		this.list = this.store.pipe( select( state => state.photoLibraryState.list ) );
-		this.selectedPhotos = this.store.pipe( select( state => state.photoLibraryState.selectedPhotos ), tap( p => console.log( p ) ) );
+		this.selectedPhotos = this.store.pipe( select( state => state.photoLibraryState.selectedPhotos ) );
 
 		/**
 		 * Store Dispatches
 		 */
 		this.store.dispatch( new PhotoLibraryAction.Load() );
+		// this.store.dispatch( new PhotoLibraryAction.LoadTagList() );
 	}
 
 	ngOnInit (): void
@@ -66,6 +66,11 @@ export class PhotoLibraryComponent implements OnInit
 		this.store.dispatch( new PhotoLibraryAction.PauseUpload( photo ) );
 	}
 
+	public edit (): void
+	{
+		this.store.dispatch( new PhotoLibraryAction.Edit() );
+	}
+
 	public select ( photo: Photo ): void
 	{
 		if ( photo.uploadInfo$ ) return;
@@ -74,19 +79,19 @@ export class PhotoLibraryComponent implements OnInit
 	}
 
 	/**
-	 * Dispatch Remove action
-	 */
-	public remove (): void
-	{
-		this.store.dispatch( new PhotoLibraryAction.Remove() );
-	}
-
-	/**
 	 * Dispatch UnselectAll action
 	 */
 	public unselectAll (): void
 	{
 		this.store.dispatch( new PhotoLibraryAction.UnSelectAll() );
+	}
+
+	/**
+	 * Dispatch Remove action
+	 */
+	public remove (): void
+	{
+		this.store.dispatch( new PhotoLibraryAction.Remove() );
 	}
 
 }

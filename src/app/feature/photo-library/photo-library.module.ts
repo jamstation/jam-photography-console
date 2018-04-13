@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AngularFireStorageModule } from 'angularfire2/storage';
+import { ReactiveFormsModule } from '@angular/forms';
 import
 {
 	MatIconModule,
@@ -11,34 +11,46 @@ import
 	MatCheckboxModule,
 	MatProgressBarModule,
 	MatProgressSpinnerModule,
-	MatDialogModule
+	MatDialogModule,
+	MatInputModule,
+	MatSlideToggleModule,
+	MatChipsModule,
+	MatAutocompleteModule,
+	MatMenuModule
 } from '@angular/material';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { JamWindowModule } from '../../../jam/ui-library';
 import { SafePipeModule } from '../../../jam/pipe-library/safe.pipe';
-
-import { routes } from './photo-library.routes';
-import { PhotoLibraryReducer, PhotoLibraryEffects } from './photo-library.store';
-import { PhotoLibraryService } from './photo-library.service';
-import { PhotoLibraryComponent } from './photo-library.component';
 import { JamFirestoreStorageModule } from '../../../jam/firestore-storage';
 
+import { routes } from './photo-library.routes';
+import { PhotoLibraryReducer } from './photo-library.reducer';
+import { PhotoLibraryEffects } from './photo-library.effects';
+import { PhotoLibraryService } from './photo-library.service';
+import { PhotoLibraryComponent } from './photo-library.component';
+import { PhotoEditFormComponent } from './photo-edit-form.component';
+
 @NgModule( {
-	declarations: [
-		PhotoLibraryComponent
-	],
+	declarations: [ PhotoLibraryComponent, PhotoEditFormComponent ],
 	imports: [
 		CommonModule,
 		AngularFireStorageModule,
+		ReactiveFormsModule,
 		MatIconModule,
 		MatButtonModule,
+		MatInputModule,
 		MatSelectModule,
+		MatSlideToggleModule,
+		MatChipsModule,
 		MatGridListModule,
 		MatProgressBarModule,
 		MatProgressSpinnerModule,
 		MatCheckboxModule,
+		MatAutocompleteModule,
+		MatMenuModule,
 		MatDialogModule,
 		RouterModule.forChild( routes ),
 		StoreModule.forFeature( 'photoLibraryState', PhotoLibraryReducer ),
@@ -47,8 +59,7 @@ import { JamFirestoreStorageModule } from '../../../jam/firestore-storage';
 		SafePipeModule,
 		JamFirestoreStorageModule
 	],
-	providers: [
-		PhotoLibraryService
-	]
+	providers: [ PhotoLibraryService ],
+	entryComponents: [ PhotoEditFormComponent ]
 } )
 export class PhotoLibraryModule { }

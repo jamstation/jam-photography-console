@@ -6,6 +6,10 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 0;
 }
 
+.xx-small-text {
+	font-size: xx-small;
+}
+
 .x-small-text {
 	font-size: x-small;
 }
@@ -20,4 +24,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .x-large-text {
 	font-size: x-large;
+}
+
+*[color="accent"] {
+	background-color: mediumseagreen;
 }

@@ -1,0 +1,130 @@
+<jam-window title="Customization"
+	titleIcon="palette">
+
+	<div content-template
+		class="content stretch-horizontally-90 flex-vertical flex-start-center">
+
+		<mat-accordion class="accordion stretch-horizontally">
+
+			<mat-expansion-panel hideToggle="true">
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						<span> Appearance </span>
+					</mat-panel-title>
+					<mat-panel-description>
+						<span class="panel-description"> Set colors for your site </span>
+						<mat-icon color="primary" class="panel-icon"> palette </mat-icon>
+					</mat-panel-description>
+				</mat-expansion-panel-header>
+
+				<section class="panel-content">
+					<div class="item flex flex-start-center">
+						<section class="label-section"> Background Color: </section>
+						<section class="value-section flex">
+							<button mat-raised-button
+								class="color-picker-button"
+								[style.backgroundColor]="color"
+								color="accent"
+								[(colorPicker)]="color"
+								cpPosition="bottom"
+								cpPositionOffset="-50%"
+								cpPositionRelativeToArrow="true">
+							</button>
+						</section>
+					</div>
+				</section>
+
+				<mat-action-row>
+					<button mat-button
+						type="button"
+						color="primary" (click)="_discard()">
+						Discard
+					</button>
+					<button mat-raised-button
+						type="submit"
+						color="primary">
+						Save
+					</button>
+				</mat-action-row>
+
+			</mat-expansion-panel>
+
+			<mat-expansion-panel hideToggle="true">
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						<span> About </span>
+					</mat-panel-title>
+					<mat-panel-description>
+						<span class="panel-description"> Say somethng about you. This goes right in to the about page. </span>
+						<mat-icon color="primary" class="panel-icon"> chat </mat-icon>
+					</mat-panel-description>
+				</mat-expansion-panel-header>
+
+				<section class="panel-content">
+					<mat-form-field class="about-text-box-container stretch-horizontally"
+						floatLabel="never">
+						<textarea matInput matTextareaAutosize
+							class="about-text-box"
+							matAutosizeMinRows="10"
+							placeholder="I am a commercial photographer/filmmaker ............"></textarea>
+					</mat-form-field>
+				</section>
+
+				<mat-action-row>
+					<button mat-button
+						type="button"
+						color="primary" (click)="_discard()">
+						Discard
+					</button>
+					<button mat-raised-button
+						type="submit"
+						color="primary">
+						Save
+					</button>
+				</mat-action-row>
+
+			</mat-expansion-panel>
+
+
+					<!-- <section class="value-section flex" [ngSwitch]="item?.formControl">
+
+						<div *ngSwitchCase="'text'"
+							class="text-template flex">
+							<div class="value"> {{ item?.value }} </div>
+							<button mat-button
+								class="edit-button compact-button no-focus"
+								disableRipple="true"
+								color="warn"
+								(click)="edit( displayName )">
+								<mat-icon class="small-icon"> edit </mat-icon>
+							</button>
+						</div>
+
+						<div *ngSwitchCase="'slide-toggle'"
+							class="slide-toggle-template">
+							<mat-slide-toggle></mat-slide-toggle>
+						</div>
+
+						<div *ngSwitchCase="'select'"
+							class="select-template">
+							<mat-form-field>
+								<mat-select [(value)]="item.value">
+									<mat-option *ngFor="let option of item?.options" [value]="option">
+										{{ option }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+
+						<div *ngSwitchDefault
+							class="value">
+							{{ item?.value }}
+						</div>
+
+					</section>-->
+
+		</mat-accordion>
+
+	</div>
+
+</jam-window>

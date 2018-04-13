@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material";
 import { Observable } from "rxjs/Observable";
 import { map, switchMap, tap, first, withLatestFrom, toArray, merge, skip, concatMap, mergeMap } from "rxjs/operators";
 import { Action, Store, select } from "@ngrx/store";
@@ -14,18 +15,22 @@ import { PhotoLibraryModuleState } from "./photo-library.state";
 import { PhotoLibraryService } from "./photo-library.service";
 import { AngularFireStorage } from "angularfire2/storage";
 import { uniqueList, sortStringList, modifyFileNameInPath, mergeObservables, concatObservables } from "../../../jam/function-library";
+import { PhotoEditFormComponent } from "./photo-edit-form.component";
 
 @Injectable()
 export class PhotoLibraryEffects
 {
 	@Effect() public load: Observable<Action>;
+	@Effect() public loadTagList: Observable<Action>;
 	@Effect() public addPhotos: Observable<Action>;
 	@Effect() public generateThumbnails: Observable<Action>;
 	@Effect() public upload: Observable<Action>;
 	@Effect() public uploadStarted: Observable<Action>;
 	@Effect( { dispatch: false } ) public pauseUpload: Observable<any>;
 	@Effect() public add: Observable<Action>;
-	// @Effect() public modify: Observable<Action>;
+	@Effect( { dispatch: false } ) public openDialog: Observable<any>;
+	@Effect( { dispatch: false } ) public closeDialog: Observable<any>;
+	@Effect() public modify: Observable<Action>;
 	@Effect() public remove: Observable<Action>;
 
 	constructor (
@@ -33,28 +38,52 @@ export class PhotoLibraryEffects
 		private db: DatabaseService,
 		private store: Store<PhotoLibraryModuleState>,
 		private jamFirestoreStorage: JamFirestoreStorage,
-		private $: PhotoLibraryService
+		private $: PhotoLibraryService,
+		private dialogManager: MatDialog
 	)
 	{
 
 		this.load = this.actions.pipe(
 			ofType<PhotoLibraryAction.Load>( PhotoLibraryActionTypes.load ),
 			switchMap( action => this.db.tables.Photo.list ),
+			switchMap( list => this.db.tables.Tag.list
+				, ( outerValue, innerValue ) => ( { list: outerValue, tagList: innerValue } ) ),
+			map( ( { list, tagList } ) =>
+			{
+				list = list.map( item => ( {
+					...item,
+					tags: item.tagKeys.map( key => tagList.find( rItem => rItem.key == key ) )
+				} ) );
+				return { list, tagList };
+			} ),
 			switchMap( list => this.store.pipe(
 				select( state => state.photoLibraryState.uploadingPhotos )
-			), ( outerValue, innerValue ) => ( [ outerValue, innerValue ] ) ),
-			map( ( [ list, uploadingPhotos ] ) => uploadingPhotos.concat( list ) ),
-			map( list => uniqueList( list, 'cloudPath' ) ),
-			map( list => sortStringList( list, 'cloudPath', true ) ),
-			withLatestFrom( this.store.pipe( select( state => state.photoLibraryState.selectedPhotos ) ) ),
-			map( ( [ list, selectedList ] ) => list.map( item =>
+			), ( outerValue, innerValue ) => ( { ...outerValue, uploadingPhotos: innerValue } ) ),
+			map( ( { list, tagList, uploadingPhotos } ) =>
 			{
-				/* Same object needs to be returned to preserve upload info */
-				item.tags = [ 'architecture', 'city', 'black & white', 'nature', 'people', 'portrait', 'faces' ];
-				item.selected$ = !!selectedList.find( selectedItem => selectedItem.cloudPath == item.cloudPath );
-				return item;
+				list = uploadingPhotos.concat( list );
+				list = uniqueList( list, 'cloudPath' );
+				list = sortStringList( list, 'cloudPath', true );
+				return { list, tagList };
+			} )
+		).pipe(
+			withLatestFrom( this.store.pipe( select( state => state.photoLibraryState.selectedPhotos ) ) ),
+			map( ( [ { list, tagList }, selectedList ] ) => ( {
+				list, tagList, selectedList: selectedList.map( sItem =>
+				{
+					const foundItem = list.find( item => item.key == sItem.key ) || sItem;
+					/* Same object needs to be returned to preserve upload info */
+					foundItem.selected$ = !!foundItem;
+					return foundItem;
+				} )
 			} ) ),
-			map( list => new PhotoLibraryAction.Loaded( list ) )
+			map( ( { list, tagList, selectedList } ) => new PhotoLibraryAction.Loaded( list, tagList, selectedList ) )
+		);
+
+		this.loadTagList = this.actions.pipe(
+			ofType<PhotoLibraryAction.LoadTagList>( PhotoLibraryActionTypes.loadTagList ),
+			switchMap( action => this.db.tables.Tag.list ),
+			map( tagList => new PhotoLibraryAction.TagListLoaded( tagList ) )
 		);
 
 		this.add = this.actions.pipe(
@@ -63,22 +92,6 @@ export class PhotoLibraryEffects
 			map( item => item
 				? new PhotoLibraryAction.Added( item )
 				: new PhotoLibraryAction.AddFailed() )
-		);
-
-		this.remove = this.actions.pipe(
-			ofType<PhotoLibraryAction.Remove>( PhotoLibraryActionTypes.remove ),
-			withLatestFrom( this.store.pipe( select( state => state.photoLibraryState.selectedPhotos ) ) ),
-			map( ( [ action, selectedPhotos ] ) => selectedPhotos
-				.map( item => this.db.tables.Photo.remove( item.key ).pipe(
-					concatMap( deletedItem => this.jamFirestoreStorage.ref( item.cloudPath ).delete() ),
-					map( () => modifyFileNameInPath( item.cloudPath, ( fileName ) => 'thumb_' + fileName ) ),
-					concatMap( thumbnailCloudPath => this.jamFirestoreStorage.ref( thumbnailCloudPath ).delete() ),
-					map( () => item )
-				) ) ),
-			concatMap( items => concatObservables( items ) ),
-			map( item => item
-				? new PhotoLibraryAction.Removed( item )
-				: new PhotoLibraryAction.RemoveFailed() )
 		);
 
 		this.addPhotos = this.actions.pipe(
@@ -115,6 +128,40 @@ export class PhotoLibraryEffects
 					? action.item.uploadInfo$.task.resume()
 					: action.item.uploadInfo$.task.pause();
 			} )
+		);
+
+		this.modify = this.actions.pipe(
+			ofType<PhotoLibraryAction.Modify>( PhotoLibraryActionTypes.modify ),
+			switchMap( action => this.db.tables.Photo.updateFieldsMany( action.list ) ),
+			map( updatedItems => updatedItems.length
+				? new PhotoLibraryAction.Modified( updatedItems )
+				: new PhotoLibraryAction.ModifyFailed() )
+		);
+
+		this.remove = this.actions.pipe(
+			ofType<PhotoLibraryAction.Remove>( PhotoLibraryActionTypes.remove ),
+			withLatestFrom( this.store.pipe( select( state => state.photoLibraryState.selectedPhotos ) ) ),
+			map( ( [ action, selectedPhotos ] ) => selectedPhotos
+				.map( item => this.db.tables.Photo.remove( item.key ).pipe(
+					concatMap( deletedItem => this.jamFirestoreStorage.ref( item.cloudPath ).delete() ),
+					map( () => modifyFileNameInPath( item.cloudPath, ( fileName ) => 'thumb_' + fileName ) ),
+					concatMap( thumbnailCloudPath => this.jamFirestoreStorage.ref( thumbnailCloudPath ).delete() ),
+					map( () => item )
+				) ) ),
+			concatMap( items => concatObservables( items ) ),
+			map( item => item
+				? new PhotoLibraryAction.Removed( item )
+				: new PhotoLibraryAction.RemoveFailed() )
+		);
+
+		this.openDialog = this.actions.pipe(
+			ofType<PhotoLibraryAction.Edit>( PhotoLibraryActionTypes.edit ),
+			map( action => this.dialogManager.open( PhotoEditFormComponent, { width: '800px', id: 'PhotoEditFormComponent' } ) )
+		);
+
+		this.closeDialog = this.actions.pipe(
+			ofType( PhotoLibraryActionTypes.cancelEdit, PhotoLibraryActionTypes.modified ),
+			map( action => this.dialogManager.getDialogById( 'PhotoEditFormComponent' ).close() )
 		);
 
 	}

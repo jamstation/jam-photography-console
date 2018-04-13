@@ -114,6 +114,14 @@ mat-form-field.no-underline .mat-input-underline {
 	display: none;
 }
 
+mat-form-field.compact .mat-form-field-wrapper, mat-form-field.compact .mat-form-field-infix {
+	padding: 0px;
+}
+
+mat-select.no-arrow .mat-select-arrow-wrapper {
+	visibility: collapse;
+}
+
 .mat-input-infix {
 	padding-right: 10px;
 }
@@ -138,4 +146,8 @@ mat-checkbox.round-checkbox /deep/ .mat-checkbox-frame {
 mat-progress-spinner.small-spinner {
 	width: 80px;
     height: 80px;
+}
+
+.mat-action-row button.mat-raised-button {
+	margin-left: 8px;
 }

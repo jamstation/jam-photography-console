@@ -1,5 +1,5 @@
 import { CoreModuleState } from "../../core/core.store";
-import { Photo } from "../../shared/model";
+import { Photo, Tag } from "../../shared/model";
 import { JamFirestoreBatchUploadTask } from "../../../jam/firestore-storage";
 
 export interface PhotoLibraryModuleState extends CoreModuleState
@@ -10,6 +10,7 @@ export interface PhotoLibraryModuleState extends CoreModuleState
 export interface PhotoLibraryState
 {
 	list: Photo[];
+	tagList: Tag[];
 
 	processing: boolean;
 	editing: boolean;

@@ -51,9 +51,9 @@ export class LayoutEffects
 			map( action => ( [
 				{ text: 'Profile', link: Pages.profile },
 				{ text: 'Settings', link: Pages.settings },
-				{ text: 'About', link: Pages.about },
-				{ text: 'Photo Tags', link: Pages.settings },
-				{ text: 'Photo Library', link: Pages.photoLibrary }
+				{ text: 'Customization', link: Pages.customization },
+				{ text: 'Media Library', link: Pages.photoLibrary },
+				{ text: 'Tags', link: Pages.settings }
 			] ) ),
 			map( list => new LayoutAction.LoadNavListSuccess( list ) )
 		);

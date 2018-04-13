@@ -12,7 +12,6 @@ import { Validators } from "@angular/forms";
 @Injectable()
 export class CustomizationEffects
 {
-	// @Effect() public edit$: Observable<Action>;
 
 	constructor (
 		private actions$: Actions,
@@ -20,24 +19,6 @@ export class CustomizationEffects
 		private dialogManager: MatDialog
 	)
 	{
-
-		// this.edit$ = this.actions$.pipe(
-		// 	ofType<CustomizationAction.Edit>( CustomizationActionTypes.edit ),
-		// 	map( action => this.dialogManager.open( JamTextBoxDialogComponent, {
-		// 		id: 'CustomizationComponent-JamTextBoxDialogComponent',
-		// 		minWidth: '500px',
-		// 		data: {
-		// 			label: action.setting.name,
-		// 			value: action.setting.value,
-		// 			validators: [ Validators.required ]
-		// 		}
-		// 	} ) ),
-		// 	switchMap( dialogRef => dialogRef.afterClosed() ),
-		// 	tap( result => console.log( result ) ),
-		// 	map( ( result: KeyValue ) => result
-		// 		? new CustomizationAction.Edited( result )
-		// 		: new CustomizationAction.EditCancelled() ),
-		// );
 
 	}
 }
