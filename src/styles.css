@@ -20,3 +20,23 @@ body {
 button.icon-button /deep/ mat-icon {
 	line-height: 14px;
 }
+
+*[color="primary"] {
+	color: #3f51b5;
+}
+
+*[color="accent"] {
+	color: mediumseagreen;
+}
+
+*[bgColor="primary"] {
+	background-color: #3f51b5;
+}
+
+*[bgColor="accent"] {
+	background-color: mediumseagreen;
+}
+
+button.mat-button, button.mat-raised-button, button.mat-stroked-button {
+	border-radius: 3px !important;
+}

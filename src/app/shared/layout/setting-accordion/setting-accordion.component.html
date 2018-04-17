@@ -1,7 +1,6 @@
-<mat-accordion multi="true">
+<mat-accordion class="stretch-horizontally">
 
-	<mat-expansion-panel *ngFor="let group of groups | async"
-		expanded="true">
+	<mat-expansion-panel *ngFor="let group of groups | async; index as i" [expanded]="!i">
 
 		<mat-expansion-panel-header>
 			<mat-panel-title> {{ group.groupLabel }} </mat-panel-title>

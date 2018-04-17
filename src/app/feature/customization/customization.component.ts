@@ -6,6 +6,8 @@ import { CustomizationAction } from './customization.actions';
 import { CustomizationModuleState } from './customization.store';
 import { LayoutItem } from '../../../jam/model-library';
 import { uniqueList, splitArrayByValues } from '../../../jam/function-library';
+import { ActivatedRoute } from '@angular/router';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component( {
 	selector: 'app-customization',
@@ -15,13 +17,6 @@ import { uniqueList, splitArrayByValues } from '../../../jam/function-library';
 export class CustomizationComponent
 {
 
-	list: Observable<LayoutItem[]>;
-	groups: Observable<LayoutItem[]>;
-	lists: Observable<LayoutItem[][]>;
-
-	constructor ( private store: Store<CustomizationModuleState> )
-	{
-
-	}
+	constructor ( private store: Store<CustomizationModuleState> ) { }
 
 }

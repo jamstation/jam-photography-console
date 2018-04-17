@@ -1,36 +1,77 @@
-<div [class.overlay]="toolbarOpen"></div>
+<div [class.overlay]="toolbarOpen" (click)="toolbarOpen = false"></div>
 <mat-expansion-panel
 	class="floating-box stretch-horizontally"
+	color="primary"
 	hideToggle="true"
 	[expanded]="toolbarOpen"
 	(opened)="toolbarOpen = true"
 	(closed)="toolbarOpen = false">
 
-	<mat-expansion-panel-header [collapsedHeight]="( screenSize | async ) == 'xs' ? '40px' : '30px'">
+	<mat-expansion-panel-header
+		[collapsedHeight]="( screenSize | async ) == 'xs' ? '40px' : '40px'"
+		expandedHeight="90px">
 
 		<mat-panel-title class="flex-space-between-center">
-			<div class="left-section flex">
+
+			<section class="left-section flex">
+
 				<button mat-icon-button
 					class="menu-button">
 					<mat-icon> {{ toolbarOpen ? 'close' : 'menu' }} </mat-icon>
 				</button>
-				<!-- <div class="left-pad"></div> -->
-			</div>
-			<div class="title-section">
-				<span class="title small-text"> {{ companyTitle | async }} </span>
-			</div>
-			<div class="right-section">
-				<!-- <button mat-icon-button
-					class="settings-button"
-					(click)="goto( pages.settings ); $event.stopPropagation();">
-					<mat-icon color="primary"> settings </mat-icon>
-				</button> -->
-				<button mat-icon-button
-					class="profile-button"
-					(click)="goto( pages.profile ); $event.stopPropagation();">
-					<mat-icon color="primary"> account_circle </mat-icon>
+
+				<button mat-button color="primary"
+					class="home-icon-button"
+					(click)="goto( pages.home )">
+					<mat-icon [class.grow-animation]="toolbarOpen"> home </mat-icon>
+					<div *ngIf="toolbarOpen"> Home </div>
 				</button>
-			</div>
+
+				<button mat-button color="primary"
+					class="help-button"
+					*ngIf="toolbarOpen"
+					(click)="goto( pages.help )">
+					<mat-icon [class.grow-animation]="toolbarOpen"> help </mat-icon>
+					<div *ngIf="toolbarOpen"> Help </div>
+				</button>
+
+				<button mat-button color="primary"
+					class="settings-button"
+					*ngIf="toolbarOpen"
+					(click)="goto( pages.settings )">
+					<mat-icon [class.grow-animation]="toolbarOpen"> settings </mat-icon>
+					<div *ngIf="toolbarOpen"> Settings </div>
+				</button>
+
+			</section>
+
+			<section class="title-section">
+				<span class="title small-text"> {{ companyTitle | async }} </span>
+			</section>
+
+			<section class="right-section flex flex-end-center" (click)="$event.stopPropagation(); toolbarOpen = false" >
+
+				<div *ngIf="user | async; then signedInTemplate; else guestTemplate"></div>
+				<ng-template #signedInTemplate>
+					<div class="flex-vertical flex-center-center">
+						<button mat-icon-button color="primary"
+							class="profile-button"
+							(click)="goto( pages.profile )">
+							<mat-icon [class.grow-animation]="toolbarOpen"> account_circle </mat-icon>
+						</button>
+						<div *ngIf="toolbarOpen" color="primary" class="small-text"> Profile </div>
+					</div>
+				</ng-template>
+				<ng-template #guestTemplate>
+					<button mat-button color="primary"
+						class="sign-in-button small-button"
+						(click)="goto( pages.signIn )">
+						SIGN IN
+					</button>
+				</ng-template>
+
+			</section>
+
 		</mat-panel-title>
 
 	</mat-expansion-panel-header>

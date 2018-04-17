@@ -4,6 +4,7 @@ import { LayoutState, LayoutReducer, LayoutEffects } from '../shared/layout';
 import { DatabaseState, DatabaseReducer, DatabaseEffects } from "../../jam/firestore";
 import { NavigatorState, NavigatorReducer, NavigatorEffects } from "../../jam/navigator";
 import { NotificationState, NotificationReducer, NotificationEffects } from "../../jam/notification";
+import { AuthState, AuthReducer, AuthEffects } from "../../jam/auth";
 
 /**
  * All States
@@ -14,6 +15,7 @@ export interface CoreModuleState
 	databaseState: DatabaseState;
 	navigatorState: NavigatorState;
 	notificationState: NotificationState;
+	authState: AuthState;
 }
 
 /**
@@ -23,7 +25,8 @@ export const CoreReducer: ActionReducerMap<CoreModuleState> = {
 	layoutState: LayoutReducer,
 	databaseState: DatabaseReducer,
 	navigatorState: NavigatorReducer,
-	notificationState: NotificationReducer
+	notificationState: NotificationReducer,
+	authState: AuthReducer
 }
 
 /**
@@ -33,5 +36,6 @@ export const CoreEffects = [
 	LayoutEffects,
 	DatabaseEffects,
 	NavigatorEffects,
-	NotificationEffects
+	NotificationEffects,
+	AuthEffects
 ]

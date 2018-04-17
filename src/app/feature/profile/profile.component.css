@@ -6,7 +6,39 @@
 	align-items: center;
 }
 
-.content {
-	width: 95%;
-	height: 90%;
+jam-window {
+	max-width: 600px;
+	max-height: 1000px;
+}
+
+.profile-background {
+	height: 300px;
+	border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.profile-picture-button {
+	margin-top: -50px;
+	background-color: white;
+}
+
+.name {
+	color: lightslategray;
+	font-family: 'Rajdhani';
+	font-size: 40px;
+}
+
+.sign-out-button {
+	margin-top: 20px;
+	background-color: #eaeaea;
+}
+
+@media ( max-width: 576px ) {
+
+	.profile-background {
+		height: 200px;
+		border-top-left-radius: 0px;
+		border-top-right-radius: 0px;
+	}
+
 }

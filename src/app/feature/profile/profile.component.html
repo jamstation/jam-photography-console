@@ -1,11 +1,25 @@
-<jam-window title="Profile"
-	titleIcon="account_box">
+<jam-window borderRadius="7px">
+
 	<div content-template
-		class="content flex-vertical flex-start-center">
-		<app-layout-setting-accordion
-			[groups]="groups"
-			[lists]="lists"
-			(edited)="edited( $event )">
-		</app-layout-setting-accordion>
+		class="content stretch flex-vertical flex-start-center">
+
+		<div bgColor="accent" class="profile-background screen stretch-horizontally"></div>
+
+		<button mat-icon-button class="profile-picture-button">
+			<mat-icon class="jumbo-icon"
+				color="primary">
+				account_circle
+			</mat-icon>
+		</button>
+
+		<div class="name"> {{ ( user | async )?.displayName || 'Update your name' }} </div>
+
+		<button mat-button color="warn"
+			class="sign-out-button"
+			(click)="signOut()">
+			Sign Out
+		</button>
+
 	</div>
+
 </jam-window>

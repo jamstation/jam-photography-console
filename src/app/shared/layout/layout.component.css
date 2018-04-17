@@ -1,4 +1,14 @@
 main {
 	box-sizing: border-box;
-	padding-top: 30px;
+	padding-top: calc( 40px + 3% );
+	padding-bottom: 3%;
+}
+
+@media ( max-width: 576px ) {
+
+	main {
+		padding-top: 40px;
+		padding-bottom: 0;
+	}
+
 }

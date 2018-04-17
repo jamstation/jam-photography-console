@@ -13,5 +13,6 @@ export class JamWindowComponent
 
 	@Input() public title: string;
 	@Input() public titleIcon: string;
+	@Input() public borderRadius: string;
 
 }

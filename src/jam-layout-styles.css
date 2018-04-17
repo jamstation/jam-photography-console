@@ -17,6 +17,12 @@
 	padding: 0 inherit;
 }
 
+.stretch-horizontally-95 {
+	width: 95%;
+	margin: inherit 0;
+	padding: inherit 0;
+}
+
 .stretch-horizontally-90 {
 	width: 90%;
 	margin: inherit 0;
@@ -45,6 +51,12 @@
 	width: 50%;
 	margin: inherit 0;
 	padding: inherit 0;
+}
+
+.stretch-vertically-95 {
+	height: 95%;
+	margin: 0 inherit;
+	padding: 0 inherit;
 }
 
 .stretch-vertically-90 {
@@ -91,6 +103,7 @@
 
 .flex {
 	display: flex !important;
+	flex-direction: row;
 }
 
 .flex-vertical {

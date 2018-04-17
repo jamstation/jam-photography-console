@@ -26,6 +26,6 @@ h1, h2, h3, h4, h5, h6 {
 	font-size: x-large;
 }
 
-*[color="accent"] {
-	background-color: mediumseagreen;
+.xx-large-text {
+	font-size: xx-large;
 }

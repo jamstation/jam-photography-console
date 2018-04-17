@@ -1,8 +1,11 @@
 export enum Pages
 {
+	signIn = '/sign-in',
+	register = '/register',
 	profile = '/profile',
 	settings = '/settings',
+	help = '/settings',
 	customization = '/customization',
-	photoLibrary = '/photo-library',
+	photoLibrary = '/media-library',
 	tag = '/tag'
 }

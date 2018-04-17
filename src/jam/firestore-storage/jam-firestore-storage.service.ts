@@ -86,90 +86,12 @@ export class JamFirestoreStorage
 			map( status => i )
 		) );
 
+		console.log( '------------------------------------' );
+
 		return Observable.of( null ).pipe(
 			merge( ...mergedTask ),
 			skip( 1 )
 		);
 	}
-
-	// public uploadAll<T>( files: UploadableFile<T>[] ): JamFirestoreBatchUploadTask<T>
-	// {
-	// 	let uploadTasks: JamFirestoreUploadTask[] = files.map( file => ( {
-	// 		...( this.storage.upload( file.cloudPath, file.localCopy, file.metadata ) ),
-	// 		status: new BehaviorSubject( UploadStatuses.uploading ),
-	// 		error: new BehaviorSubject( null )
-	// 	} ) );
-
-	// 	uploadTasks.map( item => item.catch( error =>
-	// 	{
-	// 		item.error.next( error );
-	// 		item.status.next( UploadStatuses.errored )
-	// 	} ) );
-
-	// 	let runningUploadTasks
-
-	// 	const totalProgress = Observable.of( 0 ).pipe(
-	// 		merge( ...uploadTasks.map( task => task.percentageChanges() ) ),
-	// 		withLatestFrom( ...uploadTasks.map( task => task.percentageChanges() ) ),
-	// 		map( ( [ triggerValue, ...progresses ] ) => progresses as number[] ),
-	// 		map( progresses => Math.floor( average( ...progresses ) ) ),
-	// 	);
-
-	// 	const isActive = totalProgress.pipe(
-	// 		filter( progress => progress == 0 || progress == 100 ),
-	// 		map( progress => !progress ) );
-
-	// 	let superUploadTask: JamFirestoreBatchUploadTask<T> = {
-	// 		getItem: ( index: number ) => uploadTasks[ index ],
-	// 		progress: () => totalProgress,
-	// 		files: files,
-	// 		items: uploadTasks,
-	// 		togglePauseOne: ( index: number ) =>
-	// 		{
-	// 			const task = uploadTasks[ index ];
-	// 			const currentStatus = task.status.getValue();
-	// 			let toggled = false;
-	// 			if ( currentStatus == UploadStatuses.paused ) {
-	// 				toggled = task.resume();
-	// 				if ( toggled ) {
-	// 					task.status.next( UploadStatuses.uploading );
-	// 				}
-	// 			} else if ( currentStatus == UploadStatuses.uploading ) {
-	// 				toggled = task.pause();
-	// 				if ( toggled ) {
-	// 					task.status.next( UploadStatuses.paused );
-	// 				}
-	// 			}
-	// 			return toggled;
-	// 		},
-	// 		cancelOne: ( index: number ) =>
-	// 		{
-	// 			const cancelled = uploadTasks[ index ].cancel();
-	// 			if ( cancelled ) {
-	// 				uploadTasks[ index ].status.next( UploadStatuses.cancelled );
-	// 			}
-	// 			return cancelled;
-	// 		},
-	// 		pause: () => uploadTasks.reduce( ( result, task ) => result = result && task.pause(), false ),
-	// 		resume: () => uploadTasks.reduce( ( result, task ) => result = result && task.resume(), false ),
-	// 		cancel: () => uploadTasks.reduce( ( result, task ) => result = result && task.cancel(), false ),
-	// 		isActive: isActive,
-	// 		completed: isActive.pipe(
-	// 			filter( active => !active ),
-	// 			map( active => true )
-	// 		),
-	// 		fileCount: uploadTasks.length,
-	// 		completedFile: Observable.of( null ).pipe(
-	// 			merge( ...uploadTasks.map( task => task.percentageChanges().pipe(
-	// 				filter( progress => progress == 100 ),
-	// 				map( progress => task.file )
-	// 			) ) )
-	// 		)
-	// 	};
-
-	// 	return superUploadTask;
-
-	// }
-
 
 }

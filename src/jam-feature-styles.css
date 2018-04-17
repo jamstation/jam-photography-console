@@ -18,19 +18,19 @@
 }
 
 .show {
-	visibility: visible !important;
+	visibility: visible;
 }
 
 .hide {
-	visibility: hidden !important;
+	visibility: hidden;
 }
 
 .collapse {
-	visibility: collapse !important;
+	visibility: collapse;
 }
 
 .add {
-	display: initial !important;
+	display: initial;
 }
 
 .remove {

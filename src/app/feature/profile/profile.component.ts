@@ -7,6 +7,7 @@ import { ProfileModuleState } from './profile.store';
 import { LayoutItem } from '../../../jam/model-library';
 import { uniqueList, splitArrayByValues } from '../../../jam/function-library';
 import { CoreModuleState } from '../../core/core.store';
+import { User, AuthAction } from '../../../jam/auth';
 
 @Component( {
 	selector: 'app-profile',
@@ -16,28 +17,16 @@ import { CoreModuleState } from '../../core/core.store';
 export class ProfileComponent
 {
 
-	list: Observable<LayoutItem[]>;
-	groups: Observable<LayoutItem[]>;
-	lists: Observable<LayoutItem[][]>;
+	public user: Observable<User>;
 
 	constructor ( private store: Store<CoreModuleState> )
 	{
+		this.user = this.store.pipe( select( state => state.authState.user ), map( user => ( { ...user, displayName: '' } ) ) );
+	}
 
-		this.list = this.store.pipe(
-			select( state => state.layoutState.list
-				.filter( item => item.category == 'profile' )
-				.sort( ( a, b ) => a.index - b.index ) )
-		);
-
-		this.lists = this.list.pipe(
-			map( list => splitArrayByValues( list, 'groupIndex' ) ),
-			filter( list => list.length > 0 )
-		);
-
-		this.groups = this.list.pipe(
-			map( list => uniqueList( list, 'groupIndex' ) )
-		);
-
+	public signOut (): void
+	{
+		this.store.dispatch( new AuthAction.SignOut() );
 	}
 
 	public edited ( item: LayoutItem ): void

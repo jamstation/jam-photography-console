@@ -46,7 +46,7 @@ export class NavigatorEffects
 					.split( '/' )
 					.map( urlPathItem => ( allParams.find( param => ( ':' + param.key ) == urlPathItem ) || { key: 'dummy', value: urlPathItem } ).value )
 					.join( '/' );
-				console.log( 'navigate-url:      ', url, '        ', allParams );
+				console.log( 'navigate-url:', url, allParams );
 				return new NavigatorAction.RouteResolved( url, allParams );
 			} ) );
 

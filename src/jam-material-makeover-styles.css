@@ -46,7 +46,8 @@ mat-toolbar.mat-toolbar-no-padding {
 button.mat-button.small-button {
     font-size: 11px;
     line-height: 28px;
-    padding: 0px 10px;
+	padding: 0px 5px;
+	min-width: 60px;
 }
 
 button.mat-button.compact-button {
@@ -72,6 +73,11 @@ button.mat-fab.align-center /deep/ .mat-button-wrapper {
 button.mat-fab.large-button {
     width: 80px;
     height: 80px;
+}
+
+button.mat-icon-button {
+	width: auto;
+	height: auto;
 }
 
 mat-icon.small-icon {
@@ -100,6 +106,27 @@ mat-icon.xx-large-icon {
     height: 40px !important;
     font-size: 40px !important;
     line-height: 40px !important;
+}
+
+mat-icon.xxx-large-icon {
+	width: 64px !important;
+    height: 64px !important;
+    font-size: 64px !important;
+    line-height: 64px !important;
+}
+
+mat-icon.jumbo-icon {
+	width: 192px !important;
+    height: 192px !important;
+    font-size: 192px !important;
+    line-height: 192px !important;
+}
+
+mat-icon.giant-icon {
+	width: 256px !important;
+    height: 256px !important;
+    font-size: 256px !important;
+    line-height: 256px !important;
 }
 
 mat-form-field .mat-form-field-infix {

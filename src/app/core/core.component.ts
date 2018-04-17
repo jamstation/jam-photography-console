@@ -8,6 +8,8 @@ import { NotificationAction } from '../../jam/notification';
 import { LayoutAction } from './../shared/layout/layout.actions';
 import { Pages } from '../shared/model/pages.enum';
 import { database } from '../../environments/environment';
+import { AuthAction } from '../../jam/auth';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component( {
 	selector: 'app-core',
@@ -15,9 +17,7 @@ import { database } from '../../environments/environment';
 } )
 export class CoreComponent
 {
-	constructor (
-		private store: Store<CoreModuleState>
-	)
+	constructor ( private store: Store<CoreModuleState> )
 	{
 		/**
 		 * Initialize Eager Modules
@@ -26,5 +26,6 @@ export class CoreComponent
 		this.store.dispatch( new DatabaseAction.Initialize( database.config.metadataPath, [ { key: 'Company', value: 'raja-singaravelu-photography' } ] ) );
 		this.store.dispatch( new NotificationAction.Initialize( { content: 'Done', action: 'Ok', duration: 100000, attended: false }, "center", "bottom" ) );
 		this.store.dispatch( new LayoutAction.Initialize() );
+		this.store.dispatch( new AuthAction.Initialize( Pages.register, Pages.signIn ) );
 	}
 }

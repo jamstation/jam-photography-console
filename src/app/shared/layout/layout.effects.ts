@@ -11,14 +11,15 @@ import { Pages } from "../../shared/model/pages.enum";
 import { sqlJoin } from "../../../jam/function-library";
 import { CoreModuleState } from "../../core/core.store";
 import { ScreenSizes } from "../../../jam/model-library";
+import { AuthAction, AuthActionTypes } from "../../../jam/auth";
 
 @Injectable()
 export class LayoutEffects
 {
+	@Effect() public initialize: Observable<Action>;
 	@Effect() public getMetadata: Observable<Action>;
 	@Effect() public getNavList: Observable<Action>;
 	@Effect() public selectNavItem: Observable<Action>;
-	@Effect() public initialize: Observable<Action>;
 
 	constructor (
 		private actions: Actions,

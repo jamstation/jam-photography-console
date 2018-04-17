@@ -6,6 +6,10 @@
 	align-items: center;
 }
 
+jam-window {
+	max-width: 1000px;
+}
+
 .tag-list {
 	max-width: 500px;
 }
@@ -26,6 +30,9 @@
 	background-color: antiquewhite;
 }
 
+.tag-list-item:hover .remove-button {
+	color: #F44336;
+}
 
 .last-modified-item-animation {
 	animation-name: last-modified-item-animation;

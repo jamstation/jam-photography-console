@@ -8,6 +8,7 @@ import { AngularFireModule } from 'angularfire2';
 import { JamFirestoreModule } from '../../jam/firestore';
 import { JamNavigatorModule } from '../../jam/navigator';
 import { JamNotificationModule } from '../../jam/notification';
+import { JamAuthModule } from '../../jam/auth';
 
 import { environment, database } from '../../environments/environment';
 
@@ -18,9 +19,7 @@ import { CoreComponent } from './core.component';
 import { LayoutModule } from '../shared/layout/layout.module';
 
 @NgModule( {
-	declarations: [
-		CoreComponent
-	],
+	declarations: [ CoreComponent ],
 	imports: [
 		RouterModule.forRoot( routes ),
 		StoreModule.forRoot( CoreReducer ),
@@ -30,13 +29,10 @@ import { LayoutModule } from '../shared/layout/layout.module';
 		JamFirestoreModule.forRoot( database.firebaseAppConfig ),
 		JamNavigatorModule,
 		JamNotificationModule,
+		JamAuthModule,
 		LayoutModule
 	],
-	exports: [
-		CoreComponent
-	],
-	providers: [
-		DatabaseService
-	]
+	exports: [ CoreComponent ],
+	providers: [ DatabaseService ]
 } )
 export class CoreModule { }
