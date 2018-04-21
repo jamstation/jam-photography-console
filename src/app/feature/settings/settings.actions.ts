@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { KeyValue, LayoutItem } from '../../../jam/model-library';
+import { KeyValue } from '../../../jam/model-library';
 
 export const enum SettingsActionTypes
 {
@@ -14,7 +14,7 @@ export namespace SettingsAction
 	export class Modify implements Action
 	{
 		public readonly type = SettingsActionTypes.modify;
-		constructor ( public item: LayoutItem ) { }
+		constructor ( public item: KeyValue ) { }
 	}
 
 	export class Modified implements Action

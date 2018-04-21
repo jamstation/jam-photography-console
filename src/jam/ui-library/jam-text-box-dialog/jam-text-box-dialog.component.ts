@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { JamTextBoxDialogData } from './jam-text-box-dialog-data.model';
 import { KeyValue } from '../../model-library';
+import { JamTextBoxDialogData } from './jam-text-box-dialog-data.model';
 
 @Component( {
 	selector: 'jam-text-box-dialog',
@@ -16,7 +16,7 @@ export class JamTextBoxDialogComponent implements OnInit
 
 	constructor (
 		@Inject( MAT_DIALOG_DATA ) public data: JamTextBoxDialogData,
-		private dialogRef: MatDialogRef<JamTextBoxDialogComponent>
+		private dialogRef: MatDialogRef<JamTextBoxDialogComponent, KeyValue>
 	) { }
 
 	ngOnInit (): void
@@ -29,7 +29,7 @@ export class JamTextBoxDialogComponent implements OnInit
 	public _submit (): void
 	{
 		const value = this.form.get( 'value' ).value;
-		const result = ( value == this.data.value )
+		const result: KeyValue = ( value == this.data.value )
 			? undefined
 			: {
 				key: this.data.key,

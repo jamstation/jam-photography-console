@@ -10,7 +10,8 @@ const initialState: PhotoLibraryState = {
 	editing: false,
 	uploadTask: null,
 	uploadingPhotos: [],
-	selectedPhotos: []
+	selectedPhotos: [],
+	localThumbnails: []
 }
 
 export function PhotoLibraryReducer ( state = initialState, action: PhotoLibraryAction.All ): PhotoLibraryState
@@ -82,21 +83,22 @@ export function PhotoLibraryReducer ( state = initialState, action: PhotoLibrary
 			return {
 				...state,
 				processing: true,
-				uploadingPhotos: uniqueList( action.list.concat( state.uploadingPhotos ), 'cloudPath' )
+				uploadingPhotos: uniqueList( action.uploadingPhotos.concat( state.uploadingPhotos ), 'cloudPath' )
 			};
 
 		case PhotoLibraryActionTypes.upload:
 			return {
 				...state,
 				processing: true,
-				uploadingPhotos: uniqueList( action.list.concat( state.uploadingPhotos ), 'cloudPath' )
+				uploadingPhotos: uniqueList( action.uploadingPhotos.concat( state.uploadingPhotos ), 'cloudPath' ),
+				localThumbnails: state.localThumbnails.concat( action.uploadingPhotos.map( item => ( { key: item.cloudPath, thumbnail: item.thumbnail } ) ) )
 			};
 
 		case PhotoLibraryActionTypes.uploadStarted:
 			return {
 				...state,
 				processing: true,
-				uploadingPhotos: uniqueList( action.list.concat( state.uploadingPhotos ), 'cloudPath' )
+				uploadingPhotos: uniqueList( action.uploadingPhotos.concat( state.uploadingPhotos ), 'cloudPath' )
 			};
 
 		case PhotoLibraryActionTypes.uploaded:

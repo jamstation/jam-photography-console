@@ -1,38 +1,36 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import
 {
+	MatDialogModule,
 	MatExpansionModule,
 	MatIconModule,
 	MatButtonModule,
 	MatInputModule,
-	MatDialogModule,
 	MatSlideToggleModule,
 	MatSelectModule
 } from '@angular/material';
+import { ColorPickerModule } from 'ngx-color-picker';
 import { JamTextBoxDialogModule, JamTextBoxDialogComponent } from '../../../../jam/ui-library';
 import { SettingAccordionComponent } from './setting-accordion.component';
 
 @NgModule( {
-	declarations: [
-		SettingAccordionComponent
-	],
+	declarations: [ SettingAccordionComponent ],
 	imports: [
 		CommonModule,
+		FormsModule,
+		MatDialogModule,
 		MatExpansionModule,
 		MatInputModule,
 		MatButtonModule,
 		MatIconModule,
-		MatDialogModule,
 		MatSlideToggleModule,
 		MatSelectModule,
+		ColorPickerModule,
 		JamTextBoxDialogModule
 	],
-	exports: [
-		SettingAccordionComponent
-	],
-	entryComponents: [
-		JamTextBoxDialogComponent
-	]
+	exports: [ SettingAccordionComponent ],
+	entryComponents: [ JamTextBoxDialogComponent ]
 } )
 export class SettingAccordionModule { }

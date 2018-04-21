@@ -10,11 +10,11 @@ import { PhotoLibraryModuleState, PhotoLibraryAction } from './photo-library.sto
 import { uniqueList, intersectUniqueLists, minusList, matDisplayFn } from '../../../jam/function-library';
 
 @Component( {
-	selector: 'app-photo-edit-form',
-	templateUrl: './photo-edit-form.component.html',
-	styleUrls: [ './photo-edit-form.component.css' ]
+	selector: 'app-photo-form',
+	templateUrl: './photo-form.component.html',
+	styleUrls: [ './photo-form.component.css' ]
 } )
-export class PhotoEditFormComponent
+export class PhotoFormComponent
 {
 
 	@ViewChild( 'tagSelect' ) public tagSelect: MatSelect;

@@ -1,47 +1,46 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import
 {
 	MatIconModule,
 	MatButtonModule,
-	MatListModule,
 	MatInputModule,
-	MatExpansionModule,
 	MatDialogModule,
-	MatSlideToggleModule
 } from '@angular/material';
 
 import { JamWindowModule } from '../../../jam/ui-library';
-import { SettingAccordionModule } from '../../shared/layout/setting-accordion';
+import { JamFirestoreStorageModule } from '../../../jam/firestore-storage';
+import { SafePipeModule } from '../../../jam/pipe-library';
 
 import { routes } from './profile.routes';
-import { ProfileComponent } from './profile.component';
 import { ProfileReducer, ProfileEffects } from './profile.store';
+import { ProfileService } from './profile.service';
+import { ProfileComponent } from './profile.component';
+import { ProfileFormComponent } from './profile-form.component';
 
 @NgModule( {
 	declarations: [
-		ProfileComponent
+		ProfileComponent, ProfileFormComponent
 	],
 	imports: [
 		CommonModule,
+		ReactiveFormsModule,
 		MatIconModule,
 		MatButtonModule,
 		MatInputModule,
-		MatListModule,
-		MatExpansionModule,
 		MatDialogModule,
-		MatSlideToggleModule,
 		RouterModule.forChild( routes ),
 		StoreModule.forFeature( 'profileState', ProfileReducer ),
 		EffectsModule.forFeature( [ ProfileEffects ] ),
 		JamWindowModule,
-		SettingAccordionModule
+		JamFirestoreStorageModule,
+		SafePipeModule
 	],
-	exports: [
-		ProfileComponent
-	]
+	providers: [ ProfileService ],
+	entryComponents: [ ProfileFormComponent ]
 } )
 export class ProfileModule { }

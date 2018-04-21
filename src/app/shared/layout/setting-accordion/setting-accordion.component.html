@@ -1,39 +1,80 @@
 <mat-accordion class="stretch-horizontally">
 
-	<mat-expansion-panel *ngFor="let group of groups | async; index as i" [expanded]="!i">
+	<mat-expansion-panel *ngFor="let group of groups | async; index as i"
+		[hideToggle]="group.groupIcon"
+		[expanded]="group.groupIndex == selectedPanelIndex"
+		(opened)="selectedPanelIndex = group.groupIndex">
 
 		<mat-expansion-panel-header>
 			<mat-panel-title> {{ group.groupLabel }} </mat-panel-title>
+			<mat-panel-description>
+				<span> {{ group.groupDescription }} </span>
+				<mat-icon *ngIf="group.groupIcon"
+					class="panel-icon"
+					color="primary">
+					{{ group.groupIcon }}
+				</mat-icon>
+			</mat-panel-description>
 		</mat-expansion-panel-header>
 
 		<div *ngFor="let item of ( lists | async )[group.groupIndex]"
 			class="item flex flex-start-center">
 
-			<section class="label-section"> {{ item.label }} </section>
+			<section *ngIf="item.label"
+				class="label-section"> {{ item.label }} </section>
 
 			<section class="value-section flex" [ngSwitch]="item.formControl">
 
 				<div *ngSwitchCase="'text'"
-					class="text-template flex">
+					class="text-template flex stretch-horizontally">
 					<div class="value"> {{ item.value }} </div>
 					<button mat-button
 						class="edit-button compact-button no-focus"
 						disableRipple="true"
 						color="warn"
-						(click)="edit( displayName )">
+						(click)="_edit( item )">
 						<mat-icon class="small-icon"> edit </mat-icon>
 					</button>
 				</div>
 
 				<div *ngSwitchCase="'slide-toggle'"
-					class="slide-toggle-template">
-					<mat-slide-toggle></mat-slide-toggle>
+					class="slide-toggle-template stretch-horizontally">
+					<mat-slide-toggle [checked]="item.value"
+						(change)="_valueChange( item, $event )">
+					</mat-slide-toggle>
+				</div>
+
+				<div *ngSwitchCase="'color-picker'"
+					class="color-picker-template stretch-horizontally">
+					<button mat-raised-button
+						class="color-picker-button"
+						color="accent"
+						[style.backgroundColor]="item.newValue$"
+						[(colorPicker)]="item.newValue$"
+						(colorPickerClose)="_valueChange( item, $event )"
+						cpPosition="bottom"
+						cpPositionOffset="-50%"
+						cpPositionRelativeToArrow="true">
+					</button>
+				</div>
+
+				<div *ngSwitchCase="'text-area'"
+					class="text-area-template stretch-horizontally">
+					<mat-form-field class="text-area-container stretch-horizontally"
+						floatLabel="never">
+						<textarea matInput matTextareaAutosize
+							class="text-area"
+							[(ngModel)]="group.newValue$"
+							matAutosizeMinRows="10"
+							[placeholder]="item.placeholder"></textarea>
+					</mat-form-field>
 				</div>
 
 				<div *ngSwitchCase="'select'"
-					class="select-template">
+					class="select-template stretch-horizontally">
 					<mat-form-field>
-						<mat-select [(value)]="item.value">
+						<mat-select [value]="item.newValue$"
+							(selectionChange)="_valueChange( item, $event.value )">
 							<mat-option *ngFor="let option of item.options" [value]="option">
 								{{ option }}
 							</mat-option>
@@ -42,13 +83,30 @@
 				</div>
 
 				<div *ngSwitchDefault
-					class="value">
-					{{ item.value }}
+					class="default-template stretch-horizontally">
+					<div class="value">
+						{{ item.value }}
+					</div>
 				</div>
 
 			</section>
 
 		</div>
+
+		<mat-action-row *ngIf="group.formControl === 'text-area'">
+			<button mat-button
+				type="button"
+				color="primary"
+				(click)="_discard( group )">
+				Discard
+			</button>
+			<button mat-raised-button
+				type="button"
+				color="primary"
+				(click)="_valueChange( group )">
+				Save
+			</button>
+		</mat-action-row>
 
 	</mat-expansion-panel>
 

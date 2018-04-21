@@ -12,20 +12,47 @@ jam-window {
 }
 
 .profile-background {
+	box-sizing: border-box;
+	padding: 20px;
 	height: 300px;
 	border-top-left-radius: 7px;
     border-top-right-radius: 7px;
 }
 
-.profile-picture-button {
-	margin-top: -50px;
+.edit-icon {
+    margin-right: 4px;
+    margin-top: -2px;
+}
+
+.profile-photo-button {
+	margin-top: -130px;
 	background-color: white;
 }
 
+.profile-photo {
+	width: 192px;
+	height: 192px;
+}
+
 .name {
+	margin-top: 50px;
 	color: lightslategray;
 	font-family: 'Rajdhani';
 	font-size: 40px;
+}
+
+.email {
+	margin-top: 20px;
+}
+
+.email-label {
+	color: gray;
+	font-style: italic;
+    margin-right: 5px;
+}
+
+.email-value {
+	font-weight: 500;
 }
 
 .sign-out-button {
@@ -39,6 +66,7 @@ jam-window {
 		height: 200px;
 		border-top-left-radius: 0px;
 		border-top-right-radius: 0px;
+		padding-right: 10px;
 	}
 
 }

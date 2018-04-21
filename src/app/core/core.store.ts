@@ -26,7 +26,7 @@ export const CoreReducer: ActionReducerMap<CoreModuleState> = {
 	databaseState: DatabaseReducer,
 	navigatorState: NavigatorReducer,
 	notificationState: NotificationReducer,
-	authState: AuthReducer
+	authState: AuthReducer,
 }
 
 /**

@@ -9,8 +9,3 @@
 jam-window {
 	max-width: 1500px;
 }
-
-app-layout-setting-accordion {
-	flex-basis: 800px;
-	flex-grow: 0.5;
-}

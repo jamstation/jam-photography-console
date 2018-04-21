@@ -1,5 +1,4 @@
 import { CoreModuleState } from "../../core/core.store";
-import { Metadata } from "../../../jam/model-library";
 
 export interface SettingsModuleState extends CoreModuleState
 {
@@ -9,4 +8,5 @@ export interface SettingsModuleState extends CoreModuleState
 export interface SettingsState
 {
 	processing: boolean;
+	modifying: boolean;
 }

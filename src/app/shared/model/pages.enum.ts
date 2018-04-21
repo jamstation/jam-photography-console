@@ -2,6 +2,7 @@ export enum Pages
 {
 	signIn = '/sign-in',
 	register = '/register',
+	dashboard = '/dashboard',
 	profile = '/profile',
 	settings = '/settings',
 	help = '/settings',

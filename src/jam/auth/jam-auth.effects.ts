@@ -33,8 +33,14 @@ export class AuthEffects
 			ofType<AuthAction.Initialize>( AuthActionTypes.initialize ),
 			// .map( action => ( { email: 'amsakanna@gmail.com' } ) ),
 			switchMap( action => this.angularFireAuth.authState ),
-			map( firebaseUser => firebaseUser
-				? new AuthAction.Authenticated( firebaseUser )
+			map( firebaseUser => firebaseUser ? ( {
+				email: firebaseUser.email,
+				displayName: firebaseUser.displayName,
+				photoURL: firebaseUser.photoURL,
+				phoneNumber: firebaseUser.phoneNumber
+			} ) : null ),
+			map( user => user
+				? new AuthAction.Authenticated( user )
 				: new AuthAction.Deauthenticated() ) );
 
 		this.requestRegisterPage = this.actions.pipe(

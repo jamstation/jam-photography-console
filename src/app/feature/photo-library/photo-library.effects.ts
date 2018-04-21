@@ -8,20 +8,18 @@ import { DatabaseService } from "../../core";
 import { PhotoLibraryActionTypes, PhotoLibraryAction } from "./photo-library.actions";
 import { Metadata, KeyValue, UploadableFile, UploadStatuses } from "../../../jam/model-library";
 import { Validators } from "@angular/forms";
-import { PHOTO_UPLOAD_FOLDER } from "./photo-library.config";
+import { PHOTO_UPLOAD_FOLDER } from "../../core";
 import { Photo } from "../../shared/model";
 import { JamFirestoreStorage } from "../../../jam/firestore-storage";
 import { PhotoLibraryModuleState } from "./photo-library.state";
 import { PhotoLibraryService } from "./photo-library.service";
-import { AngularFireStorage } from "angularfire2/storage";
 import { uniqueList, sortStringList, modifyFileNameInPath, mergeObservables, concatObservables } from "../../../jam/function-library";
-import { PhotoEditFormComponent } from "./photo-edit-form.component";
+import { PhotoFormComponent } from "./photo-form.component";
 
 @Injectable()
 export class PhotoLibraryEffects
 {
 	@Effect() public load: Observable<Action>;
-	@Effect() public loadTagList: Observable<Action>;
 	@Effect() public addPhotos: Observable<Action>;
 	@Effect() public generateThumbnails: Observable<Action>;
 	@Effect() public upload: Observable<Action>;
@@ -52,11 +50,20 @@ export class PhotoLibraryEffects
 			{
 				list = list.map( item => ( {
 					...item,
-					tags: item.tagKeys.map( key => tagList.find( rItem => rItem.key == key ) )
+					tags: item.tagKeys.map( key => tagList.find( rItem => rItem.key === key ) )
 				} ) );
 				return { list, tagList };
 			} ),
-			switchMap( list => this.store.pipe(
+			withLatestFrom( this.store.pipe( select( state => state.photoLibraryState.localThumbnails ) ) ),
+			map( ( [ { list, tagList }, localThumbnails ] ) =>
+			{
+				list = list.map( item => item.thumbnail
+					? item
+					: ( { ...item, thumbnail: ( localThumbnails.find( tItem => tItem.key === item.cloudPath ) || { key: null, value: null } ).value } )
+				)
+				return { list, tagList };
+			} ),
+			switchMap( ( { list, tagList } ) => this.store.pipe(
 				select( state => state.photoLibraryState.uploadingPhotos )
 			), ( outerValue, innerValue ) => ( { ...outerValue, uploadingPhotos: innerValue } ) ),
 			map( ( { list, tagList, uploadingPhotos } ) =>
@@ -80,11 +87,11 @@ export class PhotoLibraryEffects
 			map( ( { list, tagList, selectedList } ) => new PhotoLibraryAction.Loaded( list, tagList, selectedList ) )
 		);
 
-		this.loadTagList = this.actions.pipe(
-			ofType<PhotoLibraryAction.LoadTagList>( PhotoLibraryActionTypes.loadTagList ),
-			switchMap( action => this.db.tables.Tag.list ),
-			map( tagList => new PhotoLibraryAction.TagListLoaded( tagList ) )
-		);
+		// this.loadTagList = this.actions.pipe(
+		// 	ofType<PhotoLibraryAction.LoadTagList>( PhotoLibraryActionTypes.loadTagList ),
+		// 	switchMap( action => this.db.tables.Tag.list ),
+		// 	map( tagList => new PhotoLibraryAction.TagListLoaded( tagList ) )
+		// );
 
 		this.add = this.actions.pipe(
 			ofType<PhotoLibraryAction.Add>( PhotoLibraryActionTypes.add ),
@@ -102,21 +109,22 @@ export class PhotoLibraryEffects
 
 		this.generateThumbnails = this.actions.pipe(
 			ofType<PhotoLibraryAction.GenerateThumbnails>( PhotoLibraryActionTypes.generateThumbnails ),
-			mergeMap( action => this.$.addThumbnailsToPhotos( action.list ) ),
+			mergeMap( action => this.$.addThumbnailsToPhotos( action.uploadingPhotos ) ),
 			map( photos => new PhotoLibraryAction.Upload( photos ) )
 		);
 
 		this.upload = this.actions.pipe(
 			ofType<PhotoLibraryAction.Upload>( PhotoLibraryActionTypes.upload ),
-			map( action => this.$.upload( action.list ) ),
+			map( action => this.$.upload( action.uploadingPhotos ) ),
 			map( photos => new PhotoLibraryAction.UploadStarted( photos ) )
 		);
 
 		this.uploadStarted = this.actions.pipe(
 			ofType<PhotoLibraryAction.UploadStarted>( PhotoLibraryActionTypes.uploadStarted ),
-			map( action => ( { photos: action.list, uploadTasks: action.list.map( photo => photo.uploadInfo$.task ) } ) ),
+			map( action => ( { photos: action.uploadingPhotos, uploadTasks: action.uploadingPhotos.map( photo => photo.uploadInfo$.task ) } ) ),
 			mergeMap( ( { photos, uploadTasks } ) => this.jamFirestoreStorage.notifyOnCompletion( uploadTasks )
 				, ( outerValue, innerValue ) => outerValue.photos[ innerValue ] ),
+			map( photo => ( { ...photo, thumbnail: null, fileSize: photo.uploadInfo$.task.task.snapshot.bytesTransferred } ) ),
 			map( photo => new PhotoLibraryAction.Add( photo ) )
 		);
 
@@ -142,12 +150,7 @@ export class PhotoLibraryEffects
 			ofType<PhotoLibraryAction.Remove>( PhotoLibraryActionTypes.remove ),
 			withLatestFrom( this.store.pipe( select( state => state.photoLibraryState.selectedPhotos ) ) ),
 			map( ( [ action, selectedPhotos ] ) => selectedPhotos
-				.map( item => this.db.tables.Photo.remove( item.key ).pipe(
-					concatMap( deletedItem => this.jamFirestoreStorage.ref( item.cloudPath ).delete() ),
-					map( () => modifyFileNameInPath( item.cloudPath, ( fileName ) => 'thumb_' + fileName ) ),
-					concatMap( thumbnailCloudPath => this.jamFirestoreStorage.ref( thumbnailCloudPath ).delete() ),
-					map( () => item )
-				) ) ),
+				.map( item => this.db.tables.Photo.remove( item.key ) ) ),
 			concatMap( items => concatObservables( items ) ),
 			map( item => item
 				? new PhotoLibraryAction.Removed( item )
@@ -156,12 +159,12 @@ export class PhotoLibraryEffects
 
 		this.openDialog = this.actions.pipe(
 			ofType<PhotoLibraryAction.Edit>( PhotoLibraryActionTypes.edit ),
-			map( action => this.dialogManager.open( PhotoEditFormComponent, { width: '800px', id: 'PhotoEditFormComponent' } ) )
+			map( action => this.dialogManager.open( PhotoFormComponent, { width: '800px', id: 'PhotoFormComponent' } ) )
 		);
 
 		this.closeDialog = this.actions.pipe(
 			ofType( PhotoLibraryActionTypes.cancelEdit, PhotoLibraryActionTypes.modified ),
-			map( action => this.dialogManager.getDialogById( 'PhotoEditFormComponent' ).close() )
+			map( action => this.dialogManager.getDialogById( 'PhotoFormComponent' ).close() )
 		);
 
 	}

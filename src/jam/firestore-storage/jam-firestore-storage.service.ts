@@ -3,7 +3,7 @@ import { Observable } from "rxjs/Observable";
 import { map, merge, withLatestFrom, filter, skip, toArray, tap, concat } from "rxjs/operators";
 import { AngularFireStorage, AngularFireUploadTask, AngularFireStorageReference } from 'angularfire2/storage';
 import { UploadableFile, UploadStatuses } from "../../jam/model-library";
-import { average } from "../../jam/function-library";
+import { average, mergeObservables } from "../../jam/function-library";
 import { JamFirestoreBatchUploadTask } from "./jam-firestore-batch-upload-task.model";
 import { JamFirestoreUploadTask } from "./jam-firestore-upload-task.model";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -86,12 +86,11 @@ export class JamFirestoreStorage
 			map( status => i )
 		) );
 
-		console.log( '------------------------------------' );
-
-		return Observable.of( null ).pipe(
-			merge( ...mergedTask ),
-			skip( 1 )
-		);
+		return mergeObservables( mergedTask );
+		// return Observable.of( null ).pipe(
+		// 	merge( ...mergedTask ),
+		// 	skip( 1 )
+		// );
 	}
 
 }

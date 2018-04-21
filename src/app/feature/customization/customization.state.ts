@@ -1,5 +1,4 @@
 import { CoreModuleState } from "../../core/core.store";
-import { Metadata } from "../../../jam/model-library";
 
 export interface CustomizationModuleState extends CoreModuleState
 {
@@ -8,8 +7,6 @@ export interface CustomizationModuleState extends CoreModuleState
 
 export interface CustomizationState
 {
-	list: Metadata[];
-
 	processing: boolean;
-	editing: boolean;
+	modifying: boolean;
 }

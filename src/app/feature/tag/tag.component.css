@@ -52,4 +52,8 @@ jam-window {
 
 @media ( max-width: 576px ) {
 
+	.footer {
+		height: 20px;
+	}
+
 }

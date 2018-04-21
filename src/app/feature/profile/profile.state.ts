@@ -1,5 +1,5 @@
 import { CoreModuleState } from "../../core/core.store";
-import { Metadata } from "../../../jam/model-library";
+import { User } from "../../../jam/auth";
 
 export interface ProfileModuleState extends CoreModuleState
 {
@@ -9,4 +9,6 @@ export interface ProfileModuleState extends CoreModuleState
 export interface ProfileState
 {
 	processing: boolean;
+	editing: boolean;
+	formItem: User;
 }

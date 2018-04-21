@@ -1,4 +1,4 @@
-export function sqlJoin<T>( leftList: T[], rightList: T[], joinKey: keyof T )
+export function sqlJoin<T extends U, U>( leftList: T[], rightList: U[], joinKey: keyof U ): T[]
 {
 	return leftList.map( leftItem =>
 	{

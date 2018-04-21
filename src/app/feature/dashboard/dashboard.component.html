@@ -1,0 +1,30 @@
+<div class="component stretch-horizontally-80 stretch-vertically-80">
+
+	<mat-grid-list class="dashboard-grid stretch-horizontally"
+			cols="4"
+			rowHeight="200px"
+			gutterSize="5px">
+
+		<mat-grid-tile (click)="goto( pages.photoLibrary )">
+			<button mat-raised-button
+				class="photo-count-button dashboard-button mat-elevation-z12">
+				<div class="flex-vertical flex-center-center">
+					<span class="value"> {{ photoCount | async }} </span>
+					<span class="key"> photos </span>
+				</div>
+			</button>
+		</mat-grid-tile>
+
+		<mat-grid-tile (click)="goto( pages.photoLibrary )">
+			<button mat-raised-button
+				class="storage-usage-button dashboard-button mat-elevation-z12">
+				<div class="flex-vertical flex-center-center">
+					<span class="value"> {{ storageUsage | async }} </span>
+					<span class="key"> Mb used </span>
+				</div>
+			</button>
+		</mat-grid-tile>
+
+	</mat-grid-list>
+
+</div>

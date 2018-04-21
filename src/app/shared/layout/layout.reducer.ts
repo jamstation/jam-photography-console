@@ -3,12 +3,10 @@ import { LayoutActionTypes, LayoutAction } from './layout.actions';
 import { ScreenSizes } from '../../../jam/model-library';
 
 const initialState: LayoutState = {
+	initialized: false,
 	processing: false,
 	screenSize: ScreenSizes.extraLarge,
-	list: [],
-	navList: [],
-	selectedNavItem: null,
-	sidebarToggled: false
+	list: []
 }
 
 export function LayoutReducer ( state = initialState, action: LayoutAction.All ): LayoutState
@@ -25,25 +23,33 @@ export function LayoutReducer ( state = initialState, action: LayoutAction.All )
 			return {
 				...state,
 				processing: false,
+				initialized: true,
 				list: action.list
 			};
 
-		case LayoutActionTypes.loadNavListSuccess:
+		case LayoutActionTypes.load:
 			return {
 				...state,
-				navList: action.navList
+				processing: true
 			};
 
-		case LayoutActionTypes.selectNavItem:
+		case LayoutActionTypes.loaded:
+			console.log( state.list );
+			console.log( state.list
+				.filter( item => item.category !== action.category )
+				.concat( action.newList ) );
 			return {
 				...state,
-				selectedNavItem: action.navItem || state.navList[ 0 ] || null
+				processing: false,
+				list: state.list
+					.filter( item => item.category !== action.category )
+					.concat( action.newList )
 			};
 
-		case LayoutActionTypes.toggleSidebar:
+		case LayoutActionTypes.loadFailed:
 			return {
 				...state,
-				sidebarToggled: !state.sidebarToggled
+				processing: false
 			};
 
 		case LayoutActionTypes.screenSizeChanged:

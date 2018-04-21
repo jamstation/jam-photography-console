@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { merge, skip, toArray, map, switchMap } from "rxjs/operators";
 import { MatGridData, ScreenSizes, UploadableFile, UploadStatuses } from "../../../jam/model-library";
-import { PHOTO_UPLOAD_FOLDER } from "./photo-library.config";
+import { PHOTO_UPLOAD_FOLDER } from "../../core";
 import { Photo } from "../../shared/model";
 import { concatObservablesToArray, readImage, resizeImage } from "../../../jam/function-library";
 import { JamFirestoreStorage } from "../../../jam/firestore-storage";

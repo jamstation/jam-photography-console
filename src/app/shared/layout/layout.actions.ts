@@ -4,11 +4,12 @@ import { NavItem, LayoutItem, ScreenSizes } from './../../../jam/model-library';
 export const enum LayoutActionTypes
 {
 	initialize = '[Layout] initialize',
-	initialized = '[Layout] initializeed',
-	loadNavListSuccess = '[Layout] load nav list success',
-	selectNavItem = '[Layout] select nav item',
-	toggleSidebar = '[Layout] toggle sidebar',
-	screenSizeChanged = '[Layout] screen size changed'
+	initialized = '[Layout] initialized',
+	load = '[Layout] load',
+	loaded = '[Layout] loaded',
+	loadFailed = '[Layout] loadFailed',
+	screenSizeChanged = '[Layout] screenSizeChanged',
+	selectNavItem = '[Layout] selectNavItem'
 }
 
 export namespace LayoutAction
@@ -25,21 +26,21 @@ export namespace LayoutAction
 		constructor ( public list: LayoutItem[] ) { }
 	}
 
-	export class LoadNavListSuccess implements Action
+	export class Load implements Action
 	{
-		public readonly type = LayoutActionTypes.loadNavListSuccess;
-		constructor ( public navList: NavItem[] ) { }
+		public readonly type = LayoutActionTypes.load;
+		constructor ( public category: string ) { }
 	}
 
-	export class SelectNavItem implements Action
+	export class Loaded implements Action
 	{
-		public readonly type = LayoutActionTypes.selectNavItem;
-		constructor ( public navItem: NavItem ) { }
+		public readonly type = LayoutActionTypes.loaded;
+		constructor ( public newList: LayoutItem[], public category: string ) { }
 	}
 
-	export class ToggleSidebar implements Action
+	export class LoadFailed implements Action
 	{
-		public readonly type = LayoutActionTypes.toggleSidebar;
+		public readonly type = LayoutActionTypes.loadFailed;
 		constructor () { }
 	}
 
@@ -49,12 +50,19 @@ export namespace LayoutAction
 		constructor ( public screenSize: ScreenSizes ) { }
 	}
 
+	export class SelectNavItem implements Action
+	{
+		public readonly type = LayoutActionTypes.selectNavItem;
+		constructor ( public navItem: NavItem ) { }
+	}
+
 	export type All
 		= Initialize
 		| Initialized
-		| LoadNavListSuccess
-		| SelectNavItem
-		| ToggleSidebar
+		| Load
+		| Loaded
+		| LoadFailed
 		| ScreenSizeChanged
+		| SelectNavItem
 		;
 }

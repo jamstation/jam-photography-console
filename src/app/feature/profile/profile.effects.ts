@@ -1,61 +1,64 @@
 import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material";
 import { Observable } from "rxjs/Observable";
-import { map, switchMap, tap, withLatestFrom } from "rxjs/operators";
+import { map, switchMap, withLatestFrom } from "rxjs/operators";
 import { Action, Store, select } from "@ngrx/store";
 import { Effect, Actions, ofType } from "@ngrx/effects";
-import { DatabaseService } from "../../core";
-import { ProfileActionTypes, ProfileAction } from "./profile.actions";
-import { MatDialog } from "@angular/material";
-import { Metadata, KeyValue } from "../../../jam/model-library";
-import { Validators } from "@angular/forms";
+import { DatabaseService } from '../../core';
 import { ProfileModuleState } from "./profile.state";
+import { ProfileActionTypes, ProfileAction } from "./profile.actions";
+import { ProfileService } from "./profile.service";
+import { ProfileFormComponent } from "./profile-form.component";
 
 @Injectable()
 export class ProfileEffects
 {
-	// @Effect() public edit$: Observable<Action>;
-	// @Effect() public edited$: Observable<Action>;
-	@Effect() public modify$: Observable<Action>;
+	@Effect() public upload: Observable<Action>;
+	@Effect() public uploadStarted: Observable<Action>;
+	@Effect( { dispatch: false } ) public openDialog: Observable<any>;
+	@Effect( { dispatch: false } ) public closeDialog: Observable<any>;
+	@Effect() public modify: Observable<Action>;
 
 	constructor (
-		private actions$: Actions,
+		private actions: Actions,
 		private store: Store<ProfileModuleState>,
 		private db: DatabaseService,
-		private dialogManager: MatDialog
+		private dialogManager: MatDialog,
+		private $: ProfileService
 	)
 	{
 
-		// this.edit$ = this.actions$.pipe(
-		// 	ofType<ProfileAction.Edit>( ProfileActionTypes.edit ),
-		// 	map( action => this.dialogManager.open( JamTextBoxDialogComponent, {
-		// 		id: 'ProfileComponent-JamTextBoxDialogComponent',
-		// 		minWidth: '500px',
-		// 		data: {
-		// 			label: action.item.label,
-		// 			value: action.item.value,
-		// 			validators: [ Validators.required ]
-		// 		}
-		// 	} ) ),
-		// 	switchMap( dialogRef => dialogRef.afterClosed() ),
-		// 	tap( result => console.log( result ) ),
-		// 	map( ( result: KeyValue ) => result
-		// 		? new ProfileAction.Edited( result )
-		// 		: new ProfileAction.EditCancelled() ),
-		// );
+		this.upload = this.actions.pipe(
+			ofType<ProfileAction.Upload>( ProfileActionTypes.upload ),
+			switchMap( action => this.$.resizePhoto( action.file ) ),
+			map( photo => this.$.upload( photo ) ),
+			map( photo => new ProfileAction.UploadStarted( photo ) )
+		);
 
-		// this.edited$ = this.actions$.pipe(
-		// 	ofType<ProfileAction.Edited>( ProfileActionTypes.edited ),
-		// 	withLatestFrom( this.store.pipe( select( state => state.profileState.list ) ) ),
-		// 	map( ( [ action, list ] ) => list.find( item => item.name == action.result.key ) ),
-		// 	map( item => new ProfileAction.Modify( item ) )
-		// );
+		this.uploadStarted = this.actions.pipe(
+			ofType<ProfileAction.UploadStarted>( ProfileActionTypes.uploadStarted ),
+			switchMap( action => action.photo.uploadInfo$.task.downloadURL() ),
+			map( url => new ProfileAction.Modify( { photoURL: url } ) )
+		);
 
-		this.modify$ = this.actions$.pipe(
+		this.modify = this.actions.pipe(
 			ofType<ProfileAction.Modify>( ProfileActionTypes.modify ),
-			switchMap( action => this.db.tables.Layout.updateElseInsert( action.item ) ),
+			withLatestFrom( this.store.pipe( select( state => state.authState.user ) ) ),
+			map( ( [ action, user ] ) => ( { ...action.user, key: user.key, email: null } ) ),
+			switchMap( user => this.db.tables.User.updateFields( user ) ),
 			map( item => item
 				? new ProfileAction.Modified( item )
 				: new ProfileAction.ModifyFailed() )
+		);
+
+		this.openDialog = this.actions.pipe(
+			ofType<ProfileAction.Edit>( ProfileActionTypes.edit ),
+			map( action => this.dialogManager.open( ProfileFormComponent, { width: '400px', id: 'ProfileFormComponent' } ) )
+		);
+
+		this.closeDialog = this.actions.pipe(
+			ofType( ProfileActionTypes.cancelEdit, ProfileActionTypes.modified ),
+			map( action => this.dialogManager.getDialogById( 'ProfileFormComponent' ).close() )
 		);
 
 	}

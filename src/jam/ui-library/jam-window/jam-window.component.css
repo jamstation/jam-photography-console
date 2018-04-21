@@ -8,6 +8,7 @@
 
 .jam-window {
 	width: 90%;
+	height: 90%;
 }
 
 header {
@@ -37,20 +38,13 @@ footer {
 
 @media ( max-width: 1450px ) {
 
-	.jam-window {
-		width: 90%;
-	}
-
-	header {
-		flex-basis: 50px !important;
-	}
-
 }
 
 @media ( max-width: 576px ) {
 
 	.jam-window {
 		width: 100%;
+		height: 100%;
 		border-radius: 0px !important;
 	}
 

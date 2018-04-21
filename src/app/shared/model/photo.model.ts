@@ -13,6 +13,7 @@ export interface Photo extends FirestoreData
 	tagKeys?: string[];
 	tags?: Tag[];
 	live?: boolean;
+	fileSize?: number;
 
 	uploadInfo$?: UploadInfo;
 	selected$?: boolean;

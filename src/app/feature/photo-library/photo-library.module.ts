@@ -18,7 +18,6 @@ import
 	MatAutocompleteModule,
 	MatMenuModule
 } from '@angular/material';
-import { AngularFireStorageModule } from 'angularfire2/storage';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -31,13 +30,12 @@ import { PhotoLibraryReducer } from './photo-library.reducer';
 import { PhotoLibraryEffects } from './photo-library.effects';
 import { PhotoLibraryService } from './photo-library.service';
 import { PhotoLibraryComponent } from './photo-library.component';
-import { PhotoEditFormComponent } from './photo-edit-form.component';
+import { PhotoFormComponent } from './photo-form.component';
 
 @NgModule( {
-	declarations: [ PhotoLibraryComponent, PhotoEditFormComponent ],
+	declarations: [ PhotoLibraryComponent, PhotoFormComponent ],
 	imports: [
 		CommonModule,
-		AngularFireStorageModule,
 		ReactiveFormsModule,
 		MatIconModule,
 		MatButtonModule,
@@ -60,6 +58,6 @@ import { PhotoEditFormComponent } from './photo-edit-form.component';
 		JamFirestoreStorageModule
 	],
 	providers: [ PhotoLibraryService ],
-	entryComponents: [ PhotoEditFormComponent ]
+	entryComponents: [ PhotoFormComponent ]
 } )
 export class PhotoLibraryModule { }

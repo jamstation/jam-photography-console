@@ -14,35 +14,10 @@
 		<mat-panel-title class="flex-space-between-center">
 
 			<section class="left-section flex">
-
 				<button mat-icon-button
 					class="menu-button">
 					<mat-icon> {{ toolbarOpen ? 'close' : 'menu' }} </mat-icon>
 				</button>
-
-				<button mat-button color="primary"
-					class="home-icon-button"
-					(click)="goto( pages.home )">
-					<mat-icon [class.grow-animation]="toolbarOpen"> home </mat-icon>
-					<div *ngIf="toolbarOpen"> Home </div>
-				</button>
-
-				<button mat-button color="primary"
-					class="help-button"
-					*ngIf="toolbarOpen"
-					(click)="goto( pages.help )">
-					<mat-icon [class.grow-animation]="toolbarOpen"> help </mat-icon>
-					<div *ngIf="toolbarOpen"> Help </div>
-				</button>
-
-				<button mat-button color="primary"
-					class="settings-button"
-					*ngIf="toolbarOpen"
-					(click)="goto( pages.settings )">
-					<mat-icon [class.grow-animation]="toolbarOpen"> settings </mat-icon>
-					<div *ngIf="toolbarOpen"> Settings </div>
-				</button>
-
 			</section>
 
 			<section class="title-section">
@@ -78,9 +53,16 @@
 
 	<div class="menu stretch flex flex-center-center"
 		(click)="toolbarOpen = false">
+		<div class="nav-link" (click)="goto( pages.dashboard )"> Dashboard </div>
 		<div class="nav-link" (click)="goto( pages.photoLibrary )"> Media Library </div>
 		<div class="nav-link" (click)="goto( pages.tag )"> Tags </div>
 		<div class="nav-link" (click)="goto( pages.customization )"> Customization </div>
+		<div class="nav-link" (click)="goto( pages.settings )"> Settings </div>
+		<!-- <button mat-icon-button
+			class="nav-link"
+			(click)="goto( pages.settings )">
+			<mat-icon> settings </mat-icon>
+		</button> -->
 	</div>
 
 </mat-expansion-panel>

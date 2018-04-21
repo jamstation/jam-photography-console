@@ -91,19 +91,19 @@ export namespace PhotoLibraryAction
 	export class GenerateThumbnails implements Action
 	{
 		public readonly type = PhotoLibraryActionTypes.generateThumbnails;
-		constructor ( public list: Photo[] ) { }
+		constructor ( public uploadingPhotos: Photo[] ) { }
 	}
 
 	export class Upload implements Action
 	{
 		public readonly type = PhotoLibraryActionTypes.upload;
-		constructor ( public list: Photo[] ) { }
+		constructor ( public uploadingPhotos: Photo[] ) { }
 	}
 
 	export class UploadStarted implements Action
 	{
 		public readonly type = PhotoLibraryActionTypes.uploadStarted;
-		constructor ( public list: Photo[] ) { }
+		constructor ( public uploadingPhotos: Photo[] ) { }
 	}
 
 	export class Uploaded implements Action

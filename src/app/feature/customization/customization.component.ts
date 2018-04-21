@@ -1,13 +1,9 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { map, filter } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import { CustomizationAction } from './customization.actions';
-import { CustomizationModuleState } from './customization.store';
 import { LayoutItem } from '../../../jam/model-library';
-import { uniqueList, splitArrayByValues } from '../../../jam/function-library';
-import { ActivatedRoute } from '@angular/router';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { LayoutAction } from '../../shared/layout';
+import { CustomizationModuleState, CustomizationAction } from './customization.store';
 
 @Component( {
 	selector: 'app-customization',
@@ -17,6 +13,15 @@ import { AngularFireAuth } from 'angularfire2/auth';
 export class CustomizationComponent
 {
 
-	constructor ( private store: Store<CustomizationModuleState> ) { }
+	constructor ( private store: Store<CustomizationModuleState> )
+	{
+		this.store.dispatch( new LayoutAction.Load( 'Customization' ) );
+	}
+
+	public modify ( layoutItem: LayoutItem )
+	{
+		const item = { key: layoutItem.key, value: layoutItem.newValue$ };
+		this.store.dispatch( new CustomizationAction.Modify( item ) );
+	}
 
 }

@@ -29,3 +29,7 @@ h1, h2, h3, h4, h5, h6 {
 .xx-large-text {
 	font-size: xx-large;
 }
+
+*[bgColor="translucent"] {
+	background-color: rgba( 255, 255, 255, 0.5 );
+}

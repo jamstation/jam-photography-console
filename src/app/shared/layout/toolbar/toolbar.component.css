@@ -41,23 +41,19 @@ mat-expansion-panel-header {
 }
 
 .left-section, .right-section {
-	width: 100px;
+	width: 50px;
 }
 
 mat-panel-title {
 	margin-right: 0px;
 }
 
-.profile-button {
-	transition: width 0.2s ease-out, height 0.2s ease-out;
+.profile-button mat-icon {
+	transition: transform 0.2s linear;
 }
 
 .grow-animation {
 	transform: scale( 1.5, 1.5 );
-}
-
-.left-section button {
-	transition: transform 0.2s ease-out;
 }
 
 @media ( max-width: 576px ) {
@@ -91,10 +87,6 @@ mat-panel-title {
 	.nav-link {
 		margin-top: 20px;
 		margin-left: 0px;
-	}
-
-	.settings-button {
-		margin-right: 0px;
 	}
 
 }

@@ -1,11 +1,10 @@
 <jam-window title="Settings"
 	titleIcon="settings">
 	<div content-template
-		class="content stretch flex flex-center-start">
+		class="content stretch-horizontally-80 flex-vertical flex-start-center">
 		<app-layout-setting-accordion
-			[groups]="groups"
-			[lists]="lists"
-			(edited)="edited( $event )">
+			category="Settings"
+			(valueChange)="modify( $event )">
 		</app-layout-setting-accordion>
 	</div>
 </jam-window>

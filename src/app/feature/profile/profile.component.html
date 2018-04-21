@@ -1,21 +1,47 @@
 <jam-window borderRadius="7px">
 
-	<div content-template
+	<div content-template *ngIf="( user$ | async ) as user"
 		class="content stretch flex-vertical flex-start-center">
 
-		<div bgColor="accent" class="profile-background screen stretch-horizontally"></div>
+		<div bgColor="accent" class="profile-background screen stretch-horizontally flex-end-end">
+			<input #fileInput
+				class="remove"
+				type="file"
+				accept="image/*"
+				(change)="uploadPhoto( $event.target.files )" />
+			<button mat-button
+				class="edit-button small-button"
+				bgColor="translucent"
+				(click)="edit()">
+				<span class="flex-center-center">
+					<mat-icon class="edit-icon x-small-icon"> edit </mat-icon>
+					<span> Edit Profile </span>
+				</span>
+			</button>
+		</div>
 
-		<button mat-icon-button class="profile-picture-button">
-			<mat-icon class="jumbo-icon"
+		<button mat-icon-button
+			class="profile-photo-button fit"
+			(click)="fileInput.click()">
+			<mat-icon *ngIf="! user.photoURL"
+				class="jumbo-icon"
 				color="primary">
 				account_circle
 			</mat-icon>
+			<img *ngIf="user.photoURL"
+				class="profile-photo round cover"
+				[src]="user.photoURL | safe: 'url'" />
 		</button>
 
-		<div class="name"> {{ ( user | async )?.displayName || 'Update your name' }} </div>
+		<div class="name"> {{ user.displayName || 'Update your name' }} </div>
+		<div class="email">
+			<span class="email-label"> signed in as </span>
+			<span class="email-value">{{ user.email }} </span>
+		</div>
 
-		<button mat-button color="warn"
+		<button mat-button
 			class="sign-out-button"
+			color="warn"
 			(click)="signOut()">
 			Sign Out
 		</button>

@@ -2,47 +2,30 @@ import { CustomizationState } from './customization.state';
 import { CustomizationActionTypes, CustomizationAction } from './customization.actions';
 
 const initialState: CustomizationState = {
-	list: [],
 	processing: false,
-	editing: false
+	modifying: false
 }
 
 export function CustomizationReducer ( state = initialState, action: CustomizationAction.All ): CustomizationState
 {
 	switch ( action.type ) {
 
-		case CustomizationActionTypes.load:
+		case CustomizationActionTypes.modify:
 			return {
 				...state,
-				processing: true
+				modifying: true
 			};
 
-		case CustomizationActionTypes.loaded:
+		case CustomizationActionTypes.modified:
 			return {
 				...state,
-				processing: false,
-				list: action.list
+				modifying: false
 			};
 
-		case CustomizationActionTypes.edit:
+		case CustomizationActionTypes.modifyFailed:
 			return {
 				...state,
-				editing: true
-			};
-
-		case CustomizationActionTypes.edited:
-			return {
-				...state,
-				editing: false,
-				list: state.list.map( item => item.name == action.result.key
-					? ( { ...item, value: action.result.value } )
-					: item )
-			};
-
-		case CustomizationActionTypes.editCancelled:
-			return {
-				...state,
-				editing: false
+				modifying: false
 			};
 
 		default:

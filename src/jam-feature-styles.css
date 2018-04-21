@@ -55,3 +55,11 @@
 .selectable {
 	user-select: all;
 }
+
+.round {
+	border-radius: 50%;
+}
+
+img.cover {
+	background-size: cover;
+}
