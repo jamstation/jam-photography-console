@@ -44,7 +44,7 @@ export class ProfileEffects
 		this.modify = this.actions.pipe(
 			ofType<ProfileAction.Modify>( ProfileActionTypes.modify ),
 			withLatestFrom( this.store.pipe( select( state => state.authState.user ) ) ),
-			map( ( [ action, user ] ) => ( { ...action.user, key: user.key, email: null } ) ),
+			map( ( [ action, user ] ) => ( { ...action.user, key: user.key, uid: null, email: null } ) ),
 			switchMap( user => this.db.tables.User.updateFields( user ) ),
 			map( item => item
 				? new ProfileAction.Modified( item )

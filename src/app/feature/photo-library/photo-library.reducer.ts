@@ -8,7 +8,6 @@ const initialState: PhotoLibraryState = {
 	tagList: [],
 	processing: false,
 	editing: false,
-	uploadTask: null,
 	uploadingPhotos: [],
 	selectedPhotos: [],
 	localThumbnails: []

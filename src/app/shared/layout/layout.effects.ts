@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ObservableMedia } from "@angular/flex-layout";
 import { Observable } from "rxjs/Observable";
-import { map, switchMap, tap, filter, first } from "rxjs/operators";
+import { map, switchMap, tap, filter, first, mergeMap } from "rxjs/operators";
 import { Action, select, Store } from "@ngrx/store";
 import { Effect, Actions, ofType } from "@ngrx/effects";
 import { DatabaseService } from "./../../core/database.service";
@@ -12,13 +12,14 @@ import { sqlJoin } from "../../../jam/function-library";
 import { CoreModuleState } from "../../core/core.store";
 import { ScreenSizes, KeyValue } from "../../../jam/model-library";
 import { AuthAction, AuthActionTypes } from "../../../jam/auth";
+import { DatabaseAction } from "../../../jam/firestore";
 
 @Injectable()
 export class LayoutEffects
 {
 	@Effect() public initialize: Observable<Action>;
-	@Effect() public setUser: Observable<Action>;
 	@Effect() public load: Observable<Action>;
+	// @Effect() public setUser: Observable<Action>;
 	@Effect() public selectNavItem: Observable<Action>;
 
 	constructor (
@@ -34,18 +35,6 @@ export class LayoutEffects
 			switchMap( action => this.observableMedia.asObservable() ),
 			map( mediaChange => mediaChange.mqAlias as ScreenSizes ),
 			map( screenSize => new LayoutAction.ScreenSizeChanged( screenSize ) )
-		);
-
-		this.setUser = this.actions.pipe(
-			ofType<AuthAction.Authenticated>( AuthActionTypes.authenticated ),
-			switchMap( action => this.store.pipe(
-				map( state => state.databaseState.initialized ),
-				filter( initialized => initialized ),
-				first() )
-				, ( outerValue, innerValue ) => outerValue.user ),
-			switchMap( user => this.db.tables.User.forceLookup( user, user.email, 'email' ) ),
-			switchMap( user => this.db.tables.User.get( user.key ) ),
-			map( user => new AuthAction.SetUser( user ) )
 		);
 
 		this.load = this.actions.pipe(
@@ -64,6 +53,21 @@ export class LayoutEffects
 			map( ( { globalList, category, list } ) => ( { list: sqlJoin( globalList, list, 'key' ), category: category } ) ),
 			map( ( { list, category } ) => new LayoutAction.Loaded( list, category ) )
 		);
+
+		// this.setUser = this.actions.pipe(
+		// 	ofType<AuthAction.Authenticated>( AuthActionTypes.authenticated ),
+		// 	switchMap( action => this.store.pipe(
+		// 		map( state => state.databaseState.initialized ),
+		// 		filter( initialized => initialized ),
+		// 		first() )
+		// 		, ( outerValue, innerValue ) => outerValue.user ),
+		// 	switchMap( user => this.db.tables.User.forceLookup( user ) ),
+		// 	tap( user => console.log( user ) ),
+		// 	mergeMap( user => [
+		// 		new AuthAction.SetUser( user ),
+		// 		new DatabaseAction.EnterCollection( 'User', user.key )
+		// 	] )
+		// );
 
 		// this.getNavList = this.actions.pipe(
 		// 	ofType<LayoutAction.Initialize>( LayoutActionTypes.initialize ),

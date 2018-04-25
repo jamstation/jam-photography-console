@@ -15,6 +15,7 @@ import { Pages } from '../../model';
 export class ToolbarComponent
 {
 
+	public toolbarOpen: boolean;
 	public screenSize: Observable<ScreenSizes>;
 	public companyTitle: Observable<string>;
 	public user: Observable<User>;

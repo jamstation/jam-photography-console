@@ -41,6 +41,7 @@ export class ProfileFormComponent
 	public submit (): void
 	{
 		this.formItem = {
+			uid: null,
 			email: null,
 			displayName: this.form.get( 'displayName' ).value
 		};

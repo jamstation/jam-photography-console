@@ -10,7 +10,8 @@ const initialState: DatabaseState = {
 	error: null,
 	path: '',
 	metadataPath: '',
-	tables: []
+	tables: [],
+	resolvedCollections: []
 }
 
 export function DatabaseReducer ( state = initialState, action: DatabaseAction.All )
@@ -43,10 +44,27 @@ export function DatabaseReducer ( state = initialState, action: DatabaseAction.A
 			};
 
 		case DatabaseActionTypes.enterCollection:
-			state.tables.forEach( table => table.resolvePath( action.collectionName, action.documentKey ) );
-			return {
-				...state,
-				tables: state.tables
+			if ( state.resolvedCollections.find( collection => collection.key === action.collectionName ) ) {
+				return state;
+			} else {
+				state.tables.forEach( table => table.resolvePath( action.collectionName, action.documentKey ) );
+				return {
+					...state,
+					tables: state.tables,
+					resolvedCollections: state.resolvedCollections.concat( { key: action.collectionName, value: action.documentKey } )
+				}
+			}
+
+		case DatabaseActionTypes.exitCollection:
+			if ( state.resolvedCollections.find( collection => collection.key !== action.collectionName ) ) {
+				return state;
+			} else {
+				state.tables.forEach( table => table.resolvePath( action.collectionName, '{' + action.collectionName + '}' ) );
+				return {
+					...state,
+					tables: state.tables,
+					resolvedCollections: state.resolvedCollections.filter( collection => collection.key !== action.collectionName )
+				}
 			}
 
 		default:

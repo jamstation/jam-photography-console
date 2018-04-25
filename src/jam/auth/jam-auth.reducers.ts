@@ -2,8 +2,9 @@ import { AuthState } from "./jam-auth.state";
 import { AuthAction, AuthActionTypes } from "./jam-auth.actions";
 
 const initialState: AuthState = {
-	user: null,
 	authenticated: false,
+	userTable: null,
+	user: null,
 	registerPage: null,
 	signInPage: null,
 	redirectUrl: '/',
@@ -26,6 +27,7 @@ export function AuthReducer ( state = initialState, action: AuthAction.All ): Au
 				...state,
 				initialized: false,
 				loading: true,
+				userTable: action.userTable,
 				registerPage: action.registerPage,
 				signInPage: action.signInPage,
 				uiWidth: action.width,

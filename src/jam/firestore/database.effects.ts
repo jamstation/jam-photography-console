@@ -29,7 +29,7 @@ export class DatabaseEffects
 					first(),
 					map( tableBases => tableBases
 						.map( table => new Table( this.firestore, table.name, table.path ) ) ),
-					map( tables => tables.map( table =>
+					map( tables => !action.enterCollectionValues ? tables : tables.map( table =>
 					{
 						action.enterCollectionValues.forEach( collection => table.resolvePath( collection.key, collection.value ) );
 						return table;

@@ -15,7 +15,6 @@ export interface PhotoLibraryState
 
 	processing: boolean;
 	editing: boolean;
-	uploadTask: JamFirestoreBatchUploadTask<Photo>;
 	uploadingPhotos: Photo[];
 	selectedPhotos: Photo[];
 	localThumbnails: KeyValue[];

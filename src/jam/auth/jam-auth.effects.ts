@@ -7,6 +7,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthModuleState } from './jam-auth.state';
 import { AuthActionTypes, AuthAction } from "./jam-auth.actions";
 import { NavigatorAction } from "../navigator";
+import { User } from "./user.model";
 
 @Injectable()
 export class AuthEffects
@@ -34,25 +35,29 @@ export class AuthEffects
 			// .map( action => ( { email: 'amsakanna@gmail.com' } ) ),
 			switchMap( action => this.angularFireAuth.authState ),
 			map( firebaseUser => firebaseUser ? ( {
+				key: firebaseUser.uid,
+				uid: firebaseUser.uid,
 				email: firebaseUser.email,
 				displayName: firebaseUser.displayName,
 				photoURL: firebaseUser.photoURL,
 				phoneNumber: firebaseUser.phoneNumber
 			} ) : null ),
-			map( user => user
+			withLatestFrom( this.store.pipe( select( state => state.authState.userTable ) ) ),
+			switchMap( ( [ user, userTable ] ) => user ? userTable.forceLookup( user ) : Observable.of( null ) ),
+			map( ( user: User ) => user
 				? new AuthAction.Authenticated( user )
 				: new AuthAction.Deauthenticated() ) );
 
 		this.requestRegisterPage = this.actions.pipe(
 			ofType<AuthAction.RequestRegisterPage>( AuthActionTypes.requestRegisterPage ),
-			withLatestFrom( this.store.pipe( map( state => state.authState.registerPage ) ) ),
+			withLatestFrom( this.store.pipe( select( state => state.authState.registerPage ) ) ),
 			map( ( [ action, registerPage ] ) => registerPage ),
 			filter( registerPage => !!registerPage ),
 			map( registerPage => new NavigatorAction.Navigate( registerPage ) ) );
 
 		this.requestSignInPage = this.actions.pipe(
 			ofType<AuthAction.RequestSignInPage>( AuthActionTypes.requestSignInPage ),
-			withLatestFrom( this.store.pipe( map( state => state.authState.signInPage ) ) ),
+			withLatestFrom( this.store.pipe( select( state => state.authState.signInPage ) ) ),
 			map( ( [ action, signInPage ] ) => signInPage ),
 			filter( signInPage => !!signInPage ),
 			map( signInPage => new NavigatorAction.Navigate( signInPage ) ) );
@@ -66,7 +71,7 @@ export class AuthEffects
 
 		this.registered = this.actions.pipe(
 			ofType<AuthAction.Registered>( AuthActionTypes.registered ),
-			withLatestFrom( this.store.pipe( map( state => state.authState.redirectUrl ) ) ),
+			withLatestFrom( this.store.pipe( select( state => state.authState.redirectUrl ) ) ),
 			map( ( [ action, redirectUrl ] ) => new NavigatorAction.RouteResolved( redirectUrl ) ) );
 
 		this.signIn = this.actions.pipe(
@@ -78,7 +83,7 @@ export class AuthEffects
 
 		this.signedIn = this.actions.pipe(
 			ofType<AuthAction.SignedIn>( AuthActionTypes.signedIn ),
-			withLatestFrom( this.store.pipe( map( state => state.authState.redirectUrl ) ) ),
+			withLatestFrom( this.store.pipe( select( state => state.authState.redirectUrl ) ) ),
 			map( ( [ action, redirectUrl ] ) => new NavigatorAction.RouteResolved( redirectUrl ) ) );
 
 		this.signOut = this.actions.pipe(

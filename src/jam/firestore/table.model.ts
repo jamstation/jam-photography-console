@@ -8,7 +8,7 @@ import { FirestoreData, TableBase } from "../../jam/model-library";
 export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 {
 
-    public suppressConsoleMessages: boolean = true;
+    public suppressConsoleMessages: boolean = false;
     public key: string;
     public name: string;
     public path: string;
@@ -45,24 +45,25 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     public get list (): Observable<T[]>
     {
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') list' );
         return this.collection.valueChanges();
     }
 
     public listFirst ( limit: number ): Observable<T[]>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] listFirst -' + ' limit: ' + limit );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') listFirst -' + ' limit: ' + limit );
         return this.db.collection<T>( this.path, ref => ref.limit( limit ) ).valueChanges();
     }
 
     public find ( searchColumn: keyof T, searchKey: any ): Observable<T>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] find -' + ' searchColumn: ' + searchColumn + ' | searchKey: ' + searchKey );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') find -' + ' searchColumn: ' + searchColumn + ' | searchKey: ' + searchKey );
         return this.filter( searchColumn, '==', searchKey, 1 ).map( list => list[ 0 ] );
     }
 
     public filter ( searchColumn: keyof T, operator: WhereFilterOp, searchKey: any, limit?: number ): Observable<T[]>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] filter -' + ' searchColumn: ' + searchColumn + ' | operator: ' + operator + ' | searchKey: ' + searchKey + ' | limit: ' + ( limit || 'none' ).toString() );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') filter -' + ' searchColumn: ' + searchColumn + ' | operator: ' + operator + ' | searchKey: ' + searchKey + ' | limit: ' + ( limit || 'none' ).toString() );
         return this.db
             .collection<T>( this.path, ref => limit
                 ? ref.where( searchColumn, operator, searchKey ).limit( limit )
@@ -72,7 +73,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     public query ( queryFn: QueryFn ): Observable<T[]>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] query -' );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') query -' );
         return this.db
             .collection<T>( this.path, queryFn )
             .valueChanges();
@@ -80,7 +81,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     public filterMany ( searchColumn: keyof T, keys: any[], limit?: number ): Observable<T[]>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] filterMany -' + ' searchColumn: ' + searchColumn + ' | keys: ' + keys, + ' | limit: ' + limit );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') filterMany -' + ' searchColumn: ' + searchColumn + ' | keys: ' + keys, + ' | limit: ' + limit );
         const item$s = keys.map( key => this.find( searchColumn, key ).pipe( first() ) );
         const items$ = concatObservablesToArray( item$s );
         return items$ || Observable.of( [] );
@@ -88,13 +89,13 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     public get ( key: string ): Observable<T>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] get', key );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') get', key );
         return key ? this.collection.doc<T>( key ).valueChanges() : Observable.of( null );
     }
 
     public getMany ( keys: string[] ): Observable<T[]>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] getMany', keys );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') getMany', keys );
         const item$s = keys.map( key => this.get( key ) );
         const items$ = concatObservablesToArray( item$s );
         return items$ || Observable.of( [] );
@@ -118,22 +119,23 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
         );
     }
 
-    public lookup ( searchKey: any, searchColumn?: keyof T ): Observable<T>
+    public lookup ( searchKey: any, searchColumn: keyof T ): Observable<T>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] lookup', this.path, searchColumn || 'keyColumn', '==', searchKey );
-        if ( !searchKey && !searchColumn ) return Observable.of( null );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') lookup', searchColumn || 'KeyColumn', '==', searchKey );
+        if ( searchKey === undefined ) return Observable.of( null );
 
         return searchColumn
             ? this.db.collection<T>( this.path, ref => ref.where( searchColumn, '==', searchKey ) )
                 .valueChanges().pipe(
+                    tap( list => console.log( list ) ),
                     map( list => list[ 0 ] || null ),
                     first() )
             : this.get( searchKey ).pipe( first() );
     }
 
-    public forceLookup ( item: T, searchKey: any = item.key, searchColumn?: keyof T ): Observable<T>
+    public forceLookup ( item: T, searchColumn?: keyof T, searchKey: any = item.key ): Observable<T>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] force-lookup', searchKey, searchColumn, item );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') force-lookup', searchKey, searchColumn, item );
         return this.lookup( searchKey, searchColumn ).pipe(
             switchMap( lookedupItem => lookedupItem
                 ? Observable.of( lookedupItem )
@@ -158,15 +160,17 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     public insert ( item: T ): Observable<T>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] insert', item );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') insert', item );
         if ( !item ) return Observable.of<T>( null );
 
         item = Table.removeVmColumns( item ) as T;
 
         let key$ = item.key
-            ? this.lookup( item.key ).pipe(
+            ? this.get( item.key ).pipe(
+                first(),
                 switchMap( existingItem => !existingItem
                     ? Observable.fromPromise( this.collection.doc( item.key ).set( item ) ).pipe(
+                        tap( () => console.log( 'item updated. existingItem: ', existingItem ) ),
                         map( () => item.key ) )
                     : Observable.of<string>( null ) ) )
             : Observable.fromPromise( this.collection.add( item ) ).pipe(
@@ -200,7 +204,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     public update ( item: T, searchKey?: any, searchColumn?: keyof T ): Observable<T>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] update', item );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') update', item );
         if ( !item ) return Observable.of<T>( null );
         /**
          * You can lookup via key or other columns.
@@ -229,7 +233,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     public updateElseInsert ( item: T, searchKey?: any, searchColumn?: keyof T ): Observable<T>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] updateElseInsert', item );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') updateElseInsert', item );
         return this.update( item, searchKey, searchColumn ).pipe(
             tap( item => console.log( item ) ),
             switchMap( updatedItem => updatedItem
@@ -239,7 +243,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     private validateAndFetchExistingItem ( item: T, searchKey?: any, searchColumn?: keyof T ): Observable<T>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] data to be written', item );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') data to be written', item );
 
         /**
          * if no item provided return immediately
@@ -267,7 +271,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     public updateFields ( item: T, searchKey?: any, searchColumn?: keyof T ): Observable<T>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] update-fields', item );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') update-fields', item );
         if ( !item ) return Observable.of<T>( null );
         /**
          * You can lookup via key or other columns
@@ -318,7 +322,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
     public remove ( searchKey: any, searchColumn?: keyof T ): Observable<T>
     {
 
-        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] delete', searchColumn, searchKey );
+        if ( !this.suppressConsoleMessages ) console.log( '[DATABASE] (' + this.path + ') delete', searchColumn, searchKey );
 
         if ( !searchKey ) return Observable.of<T>( null );
         /**

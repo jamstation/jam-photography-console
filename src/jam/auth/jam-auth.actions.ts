@@ -1,5 +1,6 @@
 import { Credential } from "./credential.model";
 import { User } from "./user.model";
+import { Table } from "../firestore";
 
 export const enum AuthActionTypes
 {
@@ -27,7 +28,7 @@ export const enum AuthActionTypes
 
 export namespace AuthAction
 {
-	export class Initialize { public readonly type = AuthActionTypes.initialize; constructor ( public registerPage?: string, public signInPage?: string, public width: string = '500px', public height: string = '400px' ) { } }
+	export class Initialize { public readonly type = AuthActionTypes.initialize; constructor ( public userTable: Table<User>, public registerPage?: string, public signInPage?: string, public width: string = '500px', public height: string = '400px' ) { } }
 	export class Initialized { public readonly type = AuthActionTypes.initialized; constructor () { } }
 	export class InitializeFailed { public readonly type = AuthActionTypes.initializeFailed; constructor () { } }
 	export class Authenticated { public readonly type = AuthActionTypes.authenticated; constructor ( public user: User ) { } }

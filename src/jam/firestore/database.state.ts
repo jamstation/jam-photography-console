@@ -1,4 +1,4 @@
-import { FirestoreData, Error } from "../../jam/model-library";
+import { FirestoreData, Error, KeyValue } from "../../jam/model-library";
 import { Table } from "./table.model";
 
 export interface DatabaseModuleState
@@ -14,4 +14,5 @@ export interface DatabaseState
 	path: string;
 	metadataPath: string;
 	tables: Table<FirestoreData>[];
+	resolvedCollections: KeyValue[]
 }

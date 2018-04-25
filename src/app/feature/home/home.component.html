@@ -1,0 +1,60 @@
+<div class="component stretch flex-vertical">
+
+	<header class="stretch-horizontally flex-vertical flex-start-center"
+		bgColor="primary">
+
+		<div class="profile">
+			<div *ngIf="user | async; then signedInTemplate; else guestTemplate"></div>
+			<ng-template #signedInTemplate>
+				<button mat-button color="primary"
+					class="sign-out-button"
+					(click)="signOut()">
+					SIGN OUT
+				</button>
+			</ng-template>
+			<ng-template #guestTemplate>
+				<button mat-button color="primary"
+					class="sign-in-button"
+					(click)="goto( pages.signIn )">
+					SIGN IN
+				</button>
+			</ng-template>
+		</div>
+
+		<div class="title flex-grow flex-center-center">
+			JamPhotography App
+		</div>
+
+	</header>
+
+	<main class="stretch-horizontally flex-grow">
+
+		<div *ngIf="( user | async ) as user" class="welcome">
+			Hello {{ user?.displayName || 'jamuser' }},&nbsp;
+			<span class="welcome-prompt-text">
+				<span *ngIf="( list | async )?.length; then validListTemplate; else emptyListTemplate"> </span>
+				<ng-template #validListTemplate> please choose a company. </ng-template>
+				<ng-template #emptyListTemplate> create your first company. </ng-template>
+			</span>
+		</div>
+
+		<mat-grid-list class="home-grid stretch-horizontally"
+				cols="4"
+				rowHeight="200px"
+				gutterSize="5px">
+
+			<mat-grid-tile *ngFor="let company of list | async"
+				(click)="select( company )">
+				<button mat-raised-button
+					class="company-button mat-elevation-z12">
+					<div class="flex-vertical flex-center-center">
+						<span class="company-name"> {{ company.key }} </span>
+					</div>
+				</button>
+			</mat-grid-tile>
+
+		</mat-grid-list>
+
+	</main>
+
+</div>

@@ -1,4 +1,5 @@
 import { User } from "./user.model";
+import { Table } from "../firestore";
 
 export interface AuthModuleState
 {
@@ -9,6 +10,7 @@ export interface AuthState
 {
 	authenticated: boolean;
 	user: User,
+	userTable: Table<User>;
 	registerPage: string;
 	signInPage: string;
 	redirectUrl: string;

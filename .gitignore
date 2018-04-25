@@ -43,3 +43,6 @@ Thumbs.db
 
 # npm
 package-lock.json
+
+# config
+/environments

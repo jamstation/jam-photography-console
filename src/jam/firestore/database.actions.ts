@@ -9,7 +9,7 @@ export const enum DatabaseActionTypes
 	initialized = '[Database] initialized',
 	initializeFailed = '[Database] initialize failed',
 	enterCollection = '[Database] enter collection',
-	exitCollection = '[Database] exit collection',
+	exitCollection = '[Database] exit collection'
 }
 
 export namespace DatabaseAction

@@ -2,6 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatButtonModule, MatInputModule } from '@angular/material';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 import { JamNavigatorModule } from '../navigator';
 import { ReadableErrorPipe } from './readable-error.pipe';
 import { AuthGuard } from './auth-guard.service';
@@ -15,6 +16,7 @@ import { RegisterComponent } from './register.component';
         MatIconModule,
         MatButtonModule,
         MatInputModule,
+        AngularFireAuthModule,
         JamNavigatorModule
     ],
     declarations: [ ReadableErrorPipe, SignInComponent, RegisterComponent ],

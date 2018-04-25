@@ -1,0 +1,48 @@
+:host {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba( 247, 250, 255, 0.8 );
+}
+
+header {
+	box-sizing: border-box;
+	padding: 50px;
+	flex-basis: 300px;
+	/* background-color: brown; */
+	color: white;
+}
+
+.profile {
+	align-self: flex-end;
+}
+
+.sign-in-button, .sign-out-button {
+	color: white;
+}
+
+.title {
+	font-family: 'Rajdhani';
+	font-size: 48px;
+}
+
+.welcome {
+	font-size: 24px;
+	color: gray;
+}
+
+main {
+	box-sizing: border-box;
+	padding: 50px;
+}
+
+.company-button {
+	width: 200px;
+	height: 200px;
+}
+
+@media ( max-width: 576px ) {
+
+}
