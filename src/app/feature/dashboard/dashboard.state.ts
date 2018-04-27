@@ -1,7 +1,7 @@
 import { KeyValue } from "../../../jam/model-library";
-import { CoreModuleState } from "../../core/core.store";
+import { AppModuleState } from "../../app.store";
 
-export interface DashboardModuleState extends CoreModuleState
+export interface DashboardModuleState extends AppModuleState
 {
 	dashboardState: DashboardState
 }

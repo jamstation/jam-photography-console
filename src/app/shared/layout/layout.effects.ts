@@ -9,7 +9,7 @@ import { LayoutActionTypes, LayoutAction } from "./layout.actions";
 import { NavigatorAction, NavigatorActionTypes } from "../../../jam/navigator";
 import { Pages } from "../../shared/model/pages.enum";
 import { sqlJoin } from "../../../jam/function-library";
-import { CoreModuleState } from "../../core/core.store";
+import { AppModuleState } from "../../app.store";
 import { ScreenSizes, KeyValue } from "../../../jam/model-library";
 import { AuthAction, AuthActionTypes } from "../../../jam/auth";
 import { DatabaseAction } from "../../../jam/firestore";
@@ -25,7 +25,7 @@ export class LayoutEffects
 	constructor (
 		private actions: Actions,
 		private db: DatabaseService,
-		private store: Store<CoreModuleState>,
+		private store: Store<AppModuleState>,
 		private observableMedia: ObservableMedia
 	)
 	{
@@ -62,7 +62,6 @@ export class LayoutEffects
 		// 		first() )
 		// 		, ( outerValue, innerValue ) => outerValue.user ),
 		// 	switchMap( user => this.db.tables.User.forceLookup( user ) ),
-		// 	tap( user => console.log( user ) ),
 		// 	mergeMap( user => [
 		// 		new AuthAction.SetUser( user ),
 		// 		new DatabaseAction.EnterCollection( 'User', user.key )

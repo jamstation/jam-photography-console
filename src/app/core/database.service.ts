@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
 import { NavItem } from './../../jam/model-library';
 import { Pages } from '../shared/model/pages.enum';
-import { CoreModuleState } from './core.store';
+import { AppModuleState } from '../app.store';
 import { Tables } from './tables.model';
 import { LayoutItem } from '../../jam/model-library/layout-item.model';
 
@@ -13,7 +13,7 @@ export class DatabaseService
 
 	public tables: Tables;
 
-	constructor ( private store: Store<CoreModuleState> )
+	constructor ( private store: Store<AppModuleState> )
 	{
 		this.store.pipe(
 			select( state => state.databaseState.tables ),

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { merge, skip, toArray, map, switchMap } from "rxjs/operators";
+import { merge, skip, toArray, map, switchMap, tap } from "rxjs/operators";
 import { MatGridData, ScreenSizes, UploadableFile, UploadStatuses } from "../../../jam/model-library";
 import { PHOTO_UPLOAD_FOLDER } from "../../core";
 import { Photo } from "../../shared/model";
@@ -51,7 +51,7 @@ export class PhotoLibraryService
 	{
 		const photoObservables = photos.map( photo => readImage( photo.uploadInfo$.localCopy ).pipe(
 			map( image => resizeImage( image, 300 ).toDataURL() ),
-			map( resizedImage => ( { ...photo, thumbnail: resizedImage } ) )
+			map( resizedImage => ( { ...photo, thumbnail: resizedImage } ) ),
 		) );
 		return concatObservablesToArray( photoObservables );
 	}

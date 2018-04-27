@@ -9,7 +9,7 @@ export const enum AuthActionTypes
 	initializeFailed = '[Auth] initializeFailed',
 	authenticated = '[Auth] authenticated',
 	deauthenticated = '[Auth] deauthenticated',
-	setUser = '[Auth] setUser',
+	loadedUser = '[Auth] loadedUser',
 	requestRegisterPage = '[Auth] requestRegisterPage',
 	register = '[Auth] register',
 	registered = '[Auth] registered',
@@ -33,7 +33,7 @@ export namespace AuthAction
 	export class InitializeFailed { public readonly type = AuthActionTypes.initializeFailed; constructor () { } }
 	export class Authenticated { public readonly type = AuthActionTypes.authenticated; constructor ( public user: User ) { } }
 	export class Deauthenticated { public readonly type = AuthActionTypes.deauthenticated; constructor () { } }
-	export class SetUser { public readonly type = AuthActionTypes.setUser; constructor ( public user: User ) { } }
+	export class LoadedUser { public readonly type = AuthActionTypes.loadedUser; constructor ( public user: User ) { } }
 	export class RequestRegisterPage { public readonly type = AuthActionTypes.requestRegisterPage; constructor ( public redirectUrl?: string ) { } }
 	export class Register { public readonly type = AuthActionTypes.register; constructor ( public credential: Credential ) { } }
 	export class Registered { public readonly type = AuthActionTypes.registered; constructor () { } }
@@ -55,7 +55,7 @@ export namespace AuthAction
 		| InitializeFailed
 		| Authenticated
 		| Deauthenticated
-		| SetUser
+		| LoadedUser
 		| RequestRegisterPage
 		| Register
 		| Registered

@@ -5,7 +5,8 @@ import { MatIconModule, MatButtonModule, MatInputModule } from '@angular/materia
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { JamNavigatorModule } from '../navigator';
 import { ReadableErrorPipe } from './readable-error.pipe';
-import { AuthGuard } from './auth-guard.service';
+import { AuthGuard } from './auth.guard';
+import { UserGuard } from './user.guard';
 import { SignInComponent } from './sign-in.component';
 import { RegisterComponent } from './register.component';
 
@@ -20,7 +21,7 @@ import { RegisterComponent } from './register.component';
         JamNavigatorModule
     ],
     declarations: [ ReadableErrorPipe, SignInComponent, RegisterComponent ],
-    providers: [ AuthGuard ],
+    providers: [ AuthGuard, UserGuard ],
     exports: [ SignInComponent, RegisterComponent ]
 } )
 export class JamAuthModule
@@ -29,7 +30,7 @@ export class JamAuthModule
     {
         return {
             ngModule: JamAuthModule,
-            providers: [ AuthGuard ]
+            providers: [ AuthGuard, UserGuard ]
         };
     }
 }

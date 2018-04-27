@@ -5,7 +5,8 @@ export const enum HomeActionTypes
 {
 	load = '[Home] load',
 	loaded = '[Home] loaded',
-	loadFailed = '[Home] loadFailed'
+	loadFailed = '[Home] loadFailed',
+	select = '[Home] select'
 }
 
 export namespace HomeAction
@@ -29,9 +30,16 @@ export namespace HomeAction
 		constructor () { }
 	}
 
+	export class Select implements Action
+	{
+		public readonly type = HomeActionTypes.select;
+		constructor ( public item: UserCompany ) { }
+	}
+
 	export type All
 		= Load
 		| Loaded
 		| LoadFailed
+		| Select
 		;
 }

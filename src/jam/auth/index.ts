@@ -1,5 +1,5 @@
 export * from './auth-form-validators.directive';
-export * from './auth-guard.service';
+export * from './auth.guard';
 export * from './credential.model';
 export * from './jam-auth.actions';
 export * from './jam-auth.effects';

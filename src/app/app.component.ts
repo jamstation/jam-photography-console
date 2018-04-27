@@ -1,23 +1,22 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { filter, first, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { CoreModuleState } from './core.store';
-import { NavigatorAction } from '../../jam/navigator';
-import { DatabaseAction, Table } from '../../jam/firestore';
-import { NotificationAction } from '../../jam/notification';
-import { LayoutAction } from './../shared/layout/layout.actions';
-import { Pages } from '../shared/model/pages.enum';
-import { database } from '../../environments/environment';
-import { AuthAction, User } from '../../jam/auth';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AppModuleState } from './app.store';
+import { NavigatorAction } from '../jam/navigator';
+import { DatabaseAction, Table } from '../jam/firestore';
+import { NotificationAction } from '../jam/notification';
+import { LayoutAction } from './shared/layout/layout.actions';
+import { Pages } from './shared/model/pages.enum';
+import { database } from '../environments/environment';
+import { AuthAction, User } from '../jam/auth';
 
 @Component( {
-	selector: 'app-core',
+	selector: 'app-root',
 	template: '<router-outlet></router-outlet>'
 } )
-export class CoreComponent
+export class AppComponent
 {
-	constructor ( private store: Store<CoreModuleState> )
+	constructor ( private store: Store<AppModuleState> )
 	{
 		/**
 		 * Initialize Eager Modules
@@ -28,6 +27,7 @@ export class CoreComponent
 		this.store.dispatch( new LayoutAction.Initialize() );
 		this.store.pipe(
 			select( state => state.databaseState.tables ),
+			filter( tables => !!tables ),
 			map( tables => tables.find( table => table.name === 'User' ) ),
 			filter( userTable => !!userTable ),
 			first()

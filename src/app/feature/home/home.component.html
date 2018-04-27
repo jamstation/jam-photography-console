@@ -30,17 +30,17 @@
 	<main class="stretch-horizontally flex-grow">
 
 		<div *ngIf="( user | async ) as user" class="welcome">
-			Hello {{ user?.displayName || 'jamuser' }},&nbsp;
-			<span class="welcome-prompt-text">
+			<div class="x-large-text"> Welcome {{ user?.displayName || 'user' }}! </div>
+			<div class="welcome-prompt-text large-text">
 				<span *ngIf="( list | async )?.length; then validListTemplate; else emptyListTemplate"> </span>
 				<ng-template #validListTemplate> please choose a company. </ng-template>
 				<ng-template #emptyListTemplate> create your first company. </ng-template>
-			</span>
+			</div>
 		</div>
 
-		<mat-grid-list class="home-grid stretch-horizontally"
-				cols="4"
-				rowHeight="200px"
+		<mat-grid-list class="home-grid stretch vertical-scroll"
+				[cols]="( gridLayoutData | async )?.cols"
+				[rowHeight]="( gridLayoutData | async )?.rowHeight"
 				gutterSize="5px">
 
 			<mat-grid-tile *ngFor="let company of list | async"
@@ -56,5 +56,9 @@
 		</mat-grid-list>
 
 	</main>
+
+	<footer>
+
+	</footer>
 
 </div>

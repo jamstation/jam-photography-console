@@ -1,22 +1,22 @@
 import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core';
+import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { configToken } from './database.config';
 import { DatabaseGuard } from './database.guard';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 
 @NgModule( {
-    imports: [ AngularFirestoreModule ],
+    imports: [ AngularFireModule, AngularFirestoreModule ],
     providers: [ DatabaseGuard ]
 } )
 export class JamFirestoreModule
 {
-    static forRoot ( firebaseAppConfig: FirebaseAppConfig ): ModuleWithProviders
+    static forRoot ( config: FirebaseAppConfig ): ModuleWithProviders
     {
         return {
             ngModule: JamFirestoreModule,
             providers: [
                 DatabaseGuard,
-                { provide: configToken, useValue: firebaseAppConfig }
+                { provide: configToken, useValue: config }
             ],
         };
     }

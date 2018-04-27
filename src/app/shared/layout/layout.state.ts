@@ -1,7 +1,7 @@
 import { NavItem, LayoutItem, ScreenSizes } from './../../../jam/model-library';
-import { CoreModuleState } from '../../core/core.store';
+import { AppModuleState } from '../../app.store';
 
-export interface LayoutModuleState extends CoreModuleState
+export interface LayoutModuleState extends AppModuleState
 {
 	layoutState: LayoutState;
 }

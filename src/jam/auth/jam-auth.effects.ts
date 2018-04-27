@@ -13,6 +13,7 @@ import { User } from "./user.model";
 export class AuthEffects
 {
 	@Effect() initialize: Observable<Action>;
+	@Effect() authenticated: Observable<Action>;
 	@Effect() requestRegisterPage: Observable<Action>;
 	@Effect() requestSignInPage: Observable<Action>;
 	@Effect() register: Observable<Action>;
@@ -42,11 +43,16 @@ export class AuthEffects
 				photoURL: firebaseUser.photoURL,
 				phoneNumber: firebaseUser.phoneNumber
 			} ) : null ),
-			withLatestFrom( this.store.pipe( select( state => state.authState.userTable ) ) ),
-			switchMap( ( [ user, userTable ] ) => user ? userTable.forceLookup( user ) : Observable.of( null ) ),
 			map( ( user: User ) => user
 				? new AuthAction.Authenticated( user )
 				: new AuthAction.Deauthenticated() ) );
+
+		this.authenticated = this.actions.pipe(
+			ofType<AuthAction.Authenticated>( AuthActionTypes.authenticated ),
+			withLatestFrom( this.store.pipe( select( state => state.authState.userTable ) ) ),
+			switchMap( ( [ action, userTable ] ) => action.user ? userTable.forceLookup( action.user ) : Observable.of( null ) ),
+			map( user => new AuthAction.LoadedUser( user ) )
+		);
 
 		this.requestRegisterPage = this.actions.pipe(
 			ofType<AuthAction.RequestRegisterPage>( AuthActionTypes.requestRegisterPage ),

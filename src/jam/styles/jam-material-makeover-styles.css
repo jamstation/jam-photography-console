@@ -122,6 +122,13 @@ mat-icon.xxx-large-icon {
     line-height: 64px !important;
 }
 
+mat-icon.x4-large-icon {
+	width: 128px !important;
+    height: 128px !important;
+    font-size: 128px !important;
+    line-height: 128px !important;
+}
+
 mat-icon.jumbo-icon {
 	width: 192px !important;
     height: 192px !important;

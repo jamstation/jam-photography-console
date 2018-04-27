@@ -44,7 +44,7 @@ export function DatabaseReducer ( state = initialState, action: DatabaseAction.A
 			};
 
 		case DatabaseActionTypes.enterCollection:
-			if ( state.resolvedCollections.find( collection => collection.key === action.collectionName ) ) {
+			if ( state.resolvedCollections.find( collection => collection.key === action.collectionName && collection.value === action.documentKey ) ) {
 				return state;
 			} else {
 				state.tables.forEach( table => table.resolvePath( action.collectionName, action.documentKey ) );

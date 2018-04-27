@@ -82,15 +82,11 @@ export class JamFirestoreStorage
 	public notifyOnCompletion ( uploadTasks: JamFirestoreUploadTask[] ): Observable<number>
 	{
 		const mergedTask = uploadTasks.map( ( task, i ) => task.status.pipe(
-			filter( status => status == UploadStatuses.completed ),
-			map( status => i )
+			filter( status => status === UploadStatuses.completed ),
+			map( status => i ),
 		) );
 
 		return mergeObservables( mergedTask );
-		// return Observable.of( null ).pipe(
-		// 	merge( ...mergedTask ),
-		// 	skip( 1 )
-		// );
 	}
 
 }

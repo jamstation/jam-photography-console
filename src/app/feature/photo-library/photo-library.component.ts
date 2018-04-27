@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, switchMap, filter } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { MatGridData, ScreenSizes } from '../../../jam/model-library';
 import { Photo } from '../../shared/model';

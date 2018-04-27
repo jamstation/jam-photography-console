@@ -1,6 +1,5 @@
-export function concatUniqueKeys<T>( keyName: string, ...arrays: T[][] ): T[]
+export function concatUniqueKeys<T>( keyName: keyof T, ...arrays: T[][] ): T[]
 {
-	console.log( keyName, arrays );
 	arrays = arrays.reverse();
 	return arrays.reduce( ( finalArray, array ) =>
 	{

@@ -1,6 +1,6 @@
-import { CoreModuleState } from "../../core/core.store";
+import { AppModuleState } from "../../app.store";
 
-export interface CustomizationModuleState extends CoreModuleState
+export interface CustomizationModuleState extends AppModuleState
 {
 	customizationState: CustomizationState
 }

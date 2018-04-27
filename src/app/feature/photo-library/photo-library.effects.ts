@@ -8,7 +8,6 @@ import { DatabaseService } from "../../core";
 import { PhotoLibraryActionTypes, PhotoLibraryAction } from "./photo-library.actions";
 import { Metadata, KeyValue, UploadableFile, UploadStatuses } from "../../../jam/model-library";
 import { Validators } from "@angular/forms";
-import { PHOTO_UPLOAD_FOLDER } from "../../core";
 import { Photo } from "../../shared/model";
 import { JamFirestoreStorage } from "../../../jam/firestore-storage";
 import { PhotoLibraryModuleState } from "./photo-library.state";

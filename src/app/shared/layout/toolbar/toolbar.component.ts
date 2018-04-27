@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store, select } from '@ngrx/store';
 import { ScreenSizes } from '../../../../jam/model-library';
 import { User, AuthAction } from '../../../../jam/auth';
-import { CoreModuleState } from '../../../core/core.store';
+import { AppModuleState } from '../../../app.store';
 import { LayoutAction } from '../layout.actions';
 import { Pages } from '../../model';
 
@@ -21,7 +21,7 @@ export class ToolbarComponent
 	public user: Observable<User>;
 	public pages = Pages;
 
-	constructor ( private store: Store<CoreModuleState> )
+	constructor ( private store: Store<AppModuleState> )
 	{
 		this.screenSize = this.store.pipe( select( state => state.layoutState.screenSize ) );
 		this.companyTitle = Observable.of( 'Jam Photography Console' );

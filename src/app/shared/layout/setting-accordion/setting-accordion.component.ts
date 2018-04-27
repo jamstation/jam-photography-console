@@ -51,12 +51,10 @@ export class SettingAccordionComponent implements OnInit
 
 	public _valueChange ( layoutItem: LayoutItem, newValue?: any ): void
 	{
-		console.log( layoutItem );
 		let item = JSON.parse( JSON.stringify( layoutItem ) );
 		if ( newValue ) {
 			item = { ...item, newValue$: newValue };
 		}
-		console.log( item );
 		this.valueChange.emit( item );
 	}
 

@@ -7,7 +7,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { KeyValue } from "../../jam/model-library";
 import { NavigatorState, NavigatorModuleState } from './jam-navigator.state';
 import { NavigatorActionTypes, NavigatorAction } from './jam-navigator.actions';
-import { flattenTree, concatUnique, concatUniqueKeyValues } from '../function-library';
+import { flattenTree, concatUniqueKeys } from '../function-library';
 
 @Injectable()
 export class NavigatorEffects
@@ -41,7 +41,7 @@ export class NavigatorEffects
 			{
 				const pageNotFound = Object.keys( state.pages ).findIndex( key => state.pages[ key ] === action.page ) < 0;
 				if ( pageNotFound ) return new NavigatorAction.RouteResolveFailed();
-				const allParams = concatUniqueKeyValues( action.params || new Array<KeyValue>(), state.params || new Array<KeyValue>() );
+				const allParams = concatUniqueKeys('key', action.params || new Array<KeyValue>(), state.params || new Array<KeyValue>() );
 				const url = action.page
 					.split( '/' )
 					.map( urlPathItem => ( allParams.find( param => ( ':' + param.key ) == urlPathItem ) || { key: 'dummy', value: urlPathItem } ).value )

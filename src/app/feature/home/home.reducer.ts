@@ -3,7 +3,8 @@ import { HomeActionTypes, HomeAction } from './home.actions';
 
 const initialState: HomeState = {
 	processing: false,
-	list: []
+	list: [],
+	selectedItem: null
 }
 
 export function HomeReducer ( state = initialState, action: HomeAction.All ): HomeState
@@ -22,6 +23,9 @@ export function HomeReducer ( state = initialState, action: HomeAction.All ): Ho
 
 		case HomeActionTypes.loadFailed:
 			return { ...state, processing: false }
+
+		case HomeActionTypes.select:
+			return { ...state, selectedItem: action.item }
 
 		default:
 			return state;

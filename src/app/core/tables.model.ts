@@ -15,7 +15,4 @@ export class Tables
 	public Customization: Table<KeyValue>;
 	public Settings: Table<KeyValue>;
 	public Aggregate: Table<KeyValue<number>>;
-
-	constructor () { }
-
 }

@@ -1,7 +1,7 @@
-import { CoreModuleState } from "../../core/core.store";
+import { AppModuleState } from "../../app.store";
 import { User } from "../../../jam/auth";
 
-export interface ProfileModuleState extends CoreModuleState
+export interface ProfileModuleState extends AppModuleState
 {
 	profileState: ProfileState
 }

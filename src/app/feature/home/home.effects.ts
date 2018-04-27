@@ -8,6 +8,7 @@ import { KeyValue } from "../../../jam/model-library";
 import { DatabaseService } from '../../core';
 import { HomeModuleState } from "./home.state";
 import { HomeActionTypes, HomeAction } from "./home.actions";
+import { DatabaseAction } from "../../../jam/firestore";
 
 @Injectable()
 export class HomeEffects
@@ -25,6 +26,5 @@ export class HomeEffects
 			switchMap( action => this.db.tables.UserCompany.list ),
 			map( list => new HomeAction.Loaded( list ) )
 		);
-
 	}
 }

@@ -35,9 +35,9 @@ export function AuthReducer ( state = initialState, action: AuthAction.All ): Au
 			};
 		case AuthActionTypes.initialized: return { ...state, initialized: true, loading: false };
 		case AuthActionTypes.initializeFailed: return { ...state, initialized: false, loading: false };
-		case AuthActionTypes.authenticated: return { ...state, authenticated: true, user: action.user };
+		case AuthActionTypes.authenticated: return { ...state, authenticated: true };
 		case AuthActionTypes.deauthenticated: return { ...state, authenticated: false, user: null };
-		case AuthActionTypes.setUser: return { ...state, user: action.user };
+		case AuthActionTypes.loadedUser: return { ...state, user: action.user };
 		case AuthActionTypes.requestRegisterPage: return { ...state, redirectUrl: action.redirectUrl || state.redirectUrl };
 		case AuthActionTypes.register: return { ...state, registering: true, loading: true };
 		case AuthActionTypes.registered: return { ...state, registering: false, loading: false };

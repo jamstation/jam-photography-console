@@ -1,8 +1,8 @@
-import { CoreModuleState } from "../../core/core.store";
+import { AppModuleState } from "../../app.store";
 import { Photo, Tag } from "../../shared/model";
 import { JamFirestoreBatchUploadTask } from "../../../jam/firestore-storage";
 
-export interface TagModuleState extends CoreModuleState
+export interface TagModuleState extends AppModuleState
 {
 	tagState: TagState
 }

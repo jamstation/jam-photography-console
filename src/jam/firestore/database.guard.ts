@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanLoad, ActivatedRouteSnapshot, RouterStateSnapshot, Route } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { filter, take, tap } from 'rxjs/operators';
+import { filter, first, tap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { DatabaseModuleState } from './database.state';
 
@@ -18,10 +18,10 @@ export class DatabaseGuard implements CanActivate, CanLoad
 		return this.store.pipe(
 			select( state => state.databaseState.initialized ),
 			filter( initialized => initialized ),
-			take( 1 ),
+			first(),
 			tap( initialized =>
 			{
-				console.log( ( initialized ? '[ check ]' : '[ problem ]' ), 'Database initialized?' );
+				console.log( '[DatabaseGuard]', 'Database initialized?', initialized );
 			} ) );
 
 	}
@@ -32,7 +32,11 @@ export class DatabaseGuard implements CanActivate, CanLoad
 		return this.store.pipe(
 			select( state => state.databaseState.initialized ),
 			filter( initialized => initialized ),
-			take( 1 ) );
+			first(),
+			tap( initialized =>
+			{
+				console.log( '[DatabaseGuard]', 'Database initialized?', initialized );
+			} ) );
 	}
 
 }

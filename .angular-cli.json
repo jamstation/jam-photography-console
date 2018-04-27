@@ -22,12 +22,12 @@
       "styles": [
         "styles.css",
         "theme.scss",
-        "jam-styles.css",
-        "jam-layout-styles.css",
-        "jam-animation-styles.css",
-        "jam-makeover-styles.css",
-        "jam-feature-styles.css",
-        "jam-material-makeover-styles.css"
+        "jam/styles/jam-styles.css",
+        "jam/styles/jam-layout-styles.css",
+        "jam/styles/jam-animation-styles.css",
+        "jam/styles/jam-makeover-styles.css",
+        "jam/styles/jam-feature-styles.css",
+        "jam/styles/jam-material-makeover-styles.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

@@ -34,10 +34,6 @@ export function LayoutReducer ( state = initialState, action: LayoutAction.All )
 			};
 
 		case LayoutActionTypes.loaded:
-			console.log( state.list );
-			console.log( state.list
-				.filter( item => item.category !== action.category )
-				.concat( action.newList ) );
 			return {
 				...state,
 				processing: false,

@@ -7,8 +7,8 @@
 }
 
 .jam-window {
-	width: 90%;
-	height: 90%;
+	width: 85%;
+	height: 85%;
 }
 
 header {
@@ -37,6 +37,11 @@ footer {
 }
 
 @media ( max-width: 1450px ) {
+
+	.jam-window {
+		width: 90%;
+		height: 90%;
+	}
 
 }
 

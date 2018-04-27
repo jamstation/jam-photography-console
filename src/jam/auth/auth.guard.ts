@@ -25,8 +25,7 @@ export class AuthGuard implements CanActivate
 			first(),
 			tap( authenticated =>
 			{
-				console.log( routerStateSnapshot.url );
-				console.log( ( authenticated ? '[ check ]' : '[ problem ]' ), 'Auth Guard let me in?', authenticated );
+				console.log( '[AuthGuard]', 'Let me in?', authenticated );
 				if ( !authenticated ) {
 					this.store.dispatch( new AuthAction.RequestSignInPage( routerStateSnapshot.url ) );
 				}
