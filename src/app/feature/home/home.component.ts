@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit
 	ngOnInit (): void
 	{
 		this.screenSize = this.store.pipe(
-			select( state => state.layoutState.screenSize )
+			select( state => state.jamLayoutState.screenSize )
 		);
 
 		this.gridLayoutData = this.screenSize.pipe(
@@ -52,6 +52,11 @@ export class HomeComponent implements OnInit
 			{ screenSize: ScreenSizes.small, cols: 2, rowHeight: '200px' },
 			{ screenSize: ScreenSizes.extraSmall, cols: 1, rowHeight: '200px' }
 		].find( gridData => gridData.screenSize == screenSize );
+	}
+
+	public create (): void
+	{
+		this.store.dispatch( new HomeAction.Create() );
 	}
 
 	public select ( company: UserCompany ): void

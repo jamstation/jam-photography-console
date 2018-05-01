@@ -8,5 +8,5 @@ export interface CompanyModuleState extends AppModuleState
 
 export interface CompanyState
 {
-	selectedItem: string;
+	selectedItem: Company;
 }

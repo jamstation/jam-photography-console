@@ -29,31 +29,65 @@
 
 	<main class="stretch-horizontally flex-grow">
 
-		<div *ngIf="( user | async ) as user" class="welcome">
-			<div class="x-large-text"> Welcome {{ user?.displayName || 'user' }}! </div>
-			<div class="welcome-prompt-text large-text">
-				<span *ngIf="( list | async )?.length; then validListTemplate; else emptyListTemplate"> </span>
-				<ng-template #validListTemplate> please choose a company. </ng-template>
-				<ng-template #emptyListTemplate> create your first company. </ng-template>
+		<span *ngIf="( user | async ) as user; then signedInContentTemplate; else guestContentTemplate"> </span>
+
+		<ng-template #signedInContentTemplate>
+
+			<div class="welcome">
+				<div class="x-large-text"> Welcome {{ user?.displayName || 'user' }}! </div>
+				<div class="welcome-prompt-text large-text">
+					<span *ngIf="( list | async )?.length; then validListTemplate; else emptyListTemplate"> </span>
+					<ng-template #validListTemplate> please choose a company. </ng-template>
+					<ng-template #emptyListTemplate> create your first company. </ng-template>
+				</div>
 			</div>
-		</div>
 
-		<mat-grid-list class="home-grid stretch vertical-scroll"
-				[cols]="( gridLayoutData | async )?.cols"
-				[rowHeight]="( gridLayoutData | async )?.rowHeight"
-				gutterSize="5px">
+			<mat-grid-list class="home-grid stretch vertical-scroll"
+					[cols]="( gridLayoutData | async )?.cols"
+					[rowHeight]="( gridLayoutData | async )?.rowHeight"
+					gutterSize="5px">
 
-			<mat-grid-tile *ngFor="let company of list | async"
-				(click)="select( company )">
-				<button mat-raised-button
-					class="company-button mat-elevation-z12">
-					<div class="flex-vertical flex-center-center">
-						<span class="company-name"> {{ company.key }} </span>
-					</div>
-				</button>
-			</mat-grid-tile>
+				<mat-grid-tile (click)="create()">
+					<button mat-raised-button
+						class="new-button company-button">
+						<div class="flex-vertical flex-center-center">
+							<mat-icon class="xxx-large-icon"> add_circle </mat-icon>
+						</div>
+					</button>
+				</mat-grid-tile>
 
-		</mat-grid-list>
+				<mat-grid-tile *ngFor="let company of list | async"
+					(click)="select( company )">
+					<button mat-raised-button
+						class="company-button"
+						color="accent">
+						<div class="flex-vertical flex-center-center">
+							<span class="company-name"> {{ company.key }} </span>
+						</div>
+					</button>
+				</mat-grid-tile>
+
+			</mat-grid-list>
+
+		</ng-template>
+
+		<ng-template #guestContentTemplate>
+			<div class="guest-content stretch flex-vertical flex-center-center">
+				<div class="x-large-text"> Please sign in or register to continue </div>
+				<div class="guest-content-actions">
+					<button mat-raised-button color="primary"
+						class="guest-content-sign-in-button"
+						(click)="goto( pages.signIn )">
+						SIGN IN
+					</button>
+					<button mat-raised-button color="primary"
+						class="guest-content-register-button"
+						(click)="goto( pages.register )">
+						REGISTER
+					</button>
+				</div>
+			</div>
+		</ng-template>
 
 	</main>
 

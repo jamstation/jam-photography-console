@@ -9,27 +9,34 @@ import
 	MatIconModule,
 	MatButtonModule,
 	MatInputModule,
-	MatGridListModule
+	MatGridListModule,
+	MatDialogModule,
+	MatSelectModule
 } from '@angular/material';
 
 import { routes } from './home.routes';
-import { HomeReducer, HomeEffects } from './home.store';
+import { HomeReducer } from './home.store';
+import { HomeEffects } from './home.effects';
 import { HomeService } from './home.service';
 import { HomeComponent } from './home.component';
+import { CompanyFormComponent } from './company-form.component';
 
 @NgModule( {
-	declarations: [ HomeComponent ],
+	declarations: [ HomeComponent, CompanyFormComponent ],
 	imports: [
 		CommonModule,
 		ReactiveFormsModule,
 		MatIconModule,
 		MatButtonModule,
 		MatInputModule,
+		MatSelectModule,
 		MatGridListModule,
+		MatDialogModule,
 		RouterModule.forChild( routes ),
 		StoreModule.forFeature( 'homeState', HomeReducer ),
 		EffectsModule.forFeature( [ HomeEffects ] )
 	],
-	providers: [ HomeService ]
+	providers: [ HomeService ],
+	entryComponents: [ CompanyFormComponent ]
 } )
 export class HomeModule { }

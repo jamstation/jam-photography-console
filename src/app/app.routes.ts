@@ -7,7 +7,7 @@ import { ErrorPageComponent } from './shared/error-page';
 export const routes: Routes = [
 
 	{ path: 'profile', loadChildren: './feature/profile/profile.module#ProfileModule', canActivate: [ AuthGuard ], canLoad: [ DatabaseGuard, UserGuard ] },
-	{ path: 'home', loadChildren: './feature/home/home.module#HomeModule', canActivate: [ AuthGuard ], canLoad: [ DatabaseGuard, UserGuard ] },
+	{ path: 'home', loadChildren: './feature/home/home.module#HomeModule', canActivate: [ AuthGuard, UserGuard ], canLoad: [ DatabaseGuard ] },
 	{ path: 'register', component: RegisterComponent, canActivate: [ DatabaseGuard ] },
 	{ path: 'company/:company', loadChildren: './feature/company/company.module#CompanyModule', canActivate: [ AuthGuard ], canLoad: [ DatabaseGuard, UserGuard ] },
 

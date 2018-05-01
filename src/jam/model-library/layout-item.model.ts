@@ -15,4 +15,5 @@ export interface LayoutItem extends FirestoreData
 	groupIcon?: string;
 	active?: boolean;
 	placeholder?: string;
+	options?: string[];
 }

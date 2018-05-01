@@ -23,7 +23,7 @@ export class ToolbarComponent
 
 	constructor ( private store: Store<AppModuleState> )
 	{
-		this.screenSize = this.store.pipe( select( state => state.layoutState.screenSize ) );
+		this.screenSize = this.store.pipe( select( state => state.jamLayoutState.screenSize ) );
 		this.companyTitle = Observable.of( 'Jam Photography Console' );
 		this.user = this.store.pipe( select( state => state.authState.user ) );
 	}

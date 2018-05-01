@@ -3,10 +3,11 @@ import { Validators } from "@angular/forms";
 import { Action, Store, select } from "@ngrx/store";
 import { Effect, Actions, ofType } from "@ngrx/effects";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
 import { DatabaseAction } from "../../../jam/firestore";
 import { CompanyModuleState } from "./company.state";
 import { CompanyActionTypes, CompanyAction } from "./company.actions";
+import { DatabaseService } from "../../core";
 
 @Injectable()
 export class CompanyEffects
@@ -16,12 +17,13 @@ export class CompanyEffects
 
 	constructor (
 		private actions: Actions,
-		private store: Store<CompanyModuleState>
+		private db: DatabaseService
 	)
 	{
 		this.select = this.actions.pipe(
 			ofType<CompanyAction.Select>( CompanyActionTypes.select ),
-			map( action => new DatabaseAction.EnterCollection( 'Company', action.key ) )
+			switchMap( action => this.db.tables.Company.get( action.key ) ),
+			map( company => new CompanyAction.Selected( company ) )
 		);
 	}
 }

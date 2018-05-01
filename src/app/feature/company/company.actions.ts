@@ -3,7 +3,8 @@ import { Company } from '../../shared/model';
 
 export const enum CompanyActionTypes
 {
-	select = '[Company] select'
+	select = '[Company] select',
+	selected = '[Company] selected'
 }
 
 export namespace CompanyAction
@@ -15,7 +16,14 @@ export namespace CompanyAction
 		constructor ( public key: string ) { }
 	}
 
+	export class Selected implements Action
+	{
+		public readonly type = CompanyActionTypes.selected;
+		constructor ( public item: Company ) { }
+	}
+
 	export type All
 		= Select
+		| Selected
 		;
 }

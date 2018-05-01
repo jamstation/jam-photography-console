@@ -1,0 +1,60 @@
+<div class="container">
+
+	<form [formGroup]="form" novalidate
+		class="form stretch"
+		(ngSubmit)="submit()">
+
+		<div mat-dialog-title class="title flex-start-center">
+			<div> Create company </div>
+		</div>
+
+		<mat-dialog-content>
+
+			<div class="form-row">
+				<div class="form-label"> Company Name: </div>
+				<div class="form-element">
+					<mat-form-field class="name">
+						<input matInput
+							class="html-form-element"
+							formControlName="name"/>
+					</mat-form-field>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-label"> Subscription: </div>
+				<div class="form-element">
+					<mat-form-field class="subscription">
+						<mat-select [value]="formItem.subscription"
+							(selectionChange)="formItem.subscription = $event.value">
+							<mat-option *ngFor="let subscription of subscriptions | async" [value]="subscription">
+								{{ subscription }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+			</div>
+
+		</mat-dialog-content>
+
+		<mat-dialog-actions align="end">
+
+			<button mat-button
+				class="cancel-button"
+				type="button"
+				(click)="cancel()">
+				Cancel
+			</button>
+			<button mat-raised-button
+				class="save-button"
+				color="primary"
+				type="submit"
+				[disabled]="form.invalid">
+				Save
+			</button>
+
+		</mat-dialog-actions>
+
+	</form>
+
+</div>

@@ -11,6 +11,7 @@ import { JamFirestoreModule } from '../jam/firestore';
 import { JamNavigatorModule } from '../jam/navigator';
 import { JamNotificationModule } from '../jam/notification';
 import { JamAuthModule } from '../jam/auth';
+import { JamLayoutModule } from '../jam/layout';
 import { environment, database } from '../environments/environment';
 
 import { CoreModule, storeDevtoolsConfig } from './core';
@@ -35,6 +36,7 @@ import { AppComponent } from './app.component';
 		JamAuthModule.forRoot(),
 		JamNavigatorModule,
 		JamNotificationModule,
+		JamLayoutModule,
 		ErrorPageModule,
 		CoreModule,
 		LayoutModule

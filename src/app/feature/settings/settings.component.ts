@@ -23,4 +23,9 @@ export class SettingsComponent
 		this.store.dispatch( new SettingsAction.Modify( item ) );
 	}
 
+	public shutdownCompany ( layoutItem: LayoutItem ): void
+	{
+		this.store.dispatch( new SettingsAction.ShutdownCompany() );
+	}
+
 }

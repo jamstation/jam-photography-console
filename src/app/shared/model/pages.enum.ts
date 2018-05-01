@@ -1,6 +1,6 @@
 export enum Pages
 {
-	profile = '/company/:company/profile',
+	profile = '/profile',
 
 	home = '/home',
 	signIn = '/sign-in',

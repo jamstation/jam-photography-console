@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { map, filter, first, tap, withLatestFrom, switchMap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { DatabaseModuleState, DatabaseAction } from '../../../jam/firestore';
-import { DatabaseService } from '../../core';
 import { NavigatorAction } from '../../../jam/navigator';
+import { DatabaseService } from '../../core';
 import { Pages } from '../../shared/model';
+import { CompanyAction } from './company.store';
 
 @Injectable()
 export class CompanyGuard implements CanActivate
@@ -38,6 +39,8 @@ export class CompanyGuard implements CanActivate
 				console.info( '[CompanyGuard]', 'Company loaded?', companyResolved );
 				if ( !companyResolved ) {
 					this.store.dispatch( new NavigatorAction.Navigate( Pages.errorPage ) );
+				} else {
+					this.store.dispatch( new CompanyAction.Select( companyKey ))
 				}
 			} ) );
 	}

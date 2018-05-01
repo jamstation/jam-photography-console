@@ -52,6 +52,10 @@ jam-window {
 
 @media ( max-width: 576px ) {
 
+	.tag-list {
+		max-width: 300px;
+	}
+
 	.footer {
 		height: 20px;
 	}

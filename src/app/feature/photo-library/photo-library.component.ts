@@ -39,7 +39,7 @@ export class PhotoLibraryComponent implements OnInit
 	ngOnInit (): void
 	{
 		this.screenSize = this.store.pipe(
-			select( state => state.layoutState.screenSize )
+			select( state => state.jamLayoutState.screenSize )
 		);
 
 		this.gridLayoutData = this.screenSize.pipe(

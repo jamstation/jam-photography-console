@@ -9,10 +9,11 @@ export function CompanyReducer ( state = initialState, action: CompanyAction.All
 {
 	switch ( action.type ) {
 
-		case CompanyActionTypes.select:
-			return { ...state, selectedItem: action.key }
+		case CompanyActionTypes.selected:
+			return { ...state, selectedItem: action.item }
 
 		default:
 			return state;
+
 	}
 }

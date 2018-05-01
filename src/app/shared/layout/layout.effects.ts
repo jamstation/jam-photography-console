@@ -12,14 +12,12 @@ import { sqlJoin } from "../../../jam/function-library";
 import { AppModuleState } from "../../app.store";
 import { ScreenSizes, KeyValue } from "../../../jam/model-library";
 import { AuthAction, AuthActionTypes } from "../../../jam/auth";
-import { DatabaseAction } from "../../../jam/firestore";
+import { DatabaseAction, Table } from "../../../jam/firestore";
 
 @Injectable()
 export class LayoutEffects
 {
-	@Effect() public initialize: Observable<Action>;
 	@Effect() public load: Observable<Action>;
-	// @Effect() public setUser: Observable<Action>;
 	@Effect() public selectNavItem: Observable<Action>;
 
 	constructor (
@@ -29,13 +27,6 @@ export class LayoutEffects
 		private observableMedia: ObservableMedia
 	)
 	{
-
-		this.initialize = this.actions.pipe(
-			ofType<LayoutAction.Initialize>( LayoutActionTypes.initialize ),
-			switchMap( action => this.observableMedia.asObservable() ),
-			map( mediaChange => mediaChange.mqAlias as ScreenSizes ),
-			map( screenSize => new LayoutAction.ScreenSizeChanged( screenSize ) )
-		);
 
 		this.load = this.actions.pipe(
 			ofType<LayoutAction.Load>( LayoutActionTypes.load ),
@@ -48,37 +39,13 @@ export class LayoutEffects
 					.where( 'category', '==', action.category )
 					.where( 'active', '==', true ) )
 				, ( outerValue, innerValue ) => ( { globalList: innerValue, category: outerValue.category } ) ),
-			switchMap( ( { globalList, category } ) => this.db.tables[ category ].list
-				, ( outerValue, innerValue ) => ( { ...outerValue, list: innerValue as KeyValue[] } ) ),
-			map( ( { globalList, category, list } ) => ( { list: sqlJoin( globalList, list, 'key' ), category: category } ) ),
+			switchMap( ( { globalList, category } ) => this.db.tables[ category ].active
+				? ( this.db.tables[ category ] as Table<KeyValue> ).list.pipe(
+					map( list => ( { globalList, category, list } ) ),
+					map( ( { globalList, category, list } ) => ( { list: sqlJoin( globalList, list, 'key' ), category: category } ) ) )
+				: Observable.of( { list: globalList, category } ) ),
 			map( ( { list, category } ) => new LayoutAction.Loaded( list, category ) )
 		);
-
-		// this.setUser = this.actions.pipe(
-		// 	ofType<AuthAction.Authenticated>( AuthActionTypes.authenticated ),
-		// 	switchMap( action => this.store.pipe(
-		// 		map( state => state.databaseState.initialized ),
-		// 		filter( initialized => initialized ),
-		// 		first() )
-		// 		, ( outerValue, innerValue ) => outerValue.user ),
-		// 	switchMap( user => this.db.tables.User.forceLookup( user ) ),
-		// 	mergeMap( user => [
-		// 		new AuthAction.SetUser( user ),
-		// 		new DatabaseAction.EnterCollection( 'User', user.key )
-		// 	] )
-		// );
-
-		// this.getNavList = this.actions.pipe(
-		// 	ofType<LayoutAction.Initialize>( LayoutActionTypes.initialize ),
-		// 	map( action => ( [
-		// 		{ text: 'Profile', link: Pages.profile },
-		// 		{ text: 'Settings', link: Pages.settings },
-		// 		{ text: 'Customization', link: Pages.customization },
-		// 		{ text: 'Media Library', link: Pages.photoLibrary },
-		// 		{ text: 'Tags', link: Pages.settings }
-		// 	] ) ),
-		// 	map( list => new LayoutAction.LoadNavListSuccess( list ) )
-		// );
 
 		this.selectNavItem = this.actions.pipe(
 			ofType<LayoutAction.SelectNavItem>( LayoutActionTypes.selectNavItem ),

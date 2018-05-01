@@ -18,6 +18,11 @@
 					class="menu-button">
 					<mat-icon> {{ toolbarOpen ? 'close' : 'menu' }} </mat-icon>
 				</button>
+				<button mat-icon-button
+					class="home-button"
+					(click)="goto( pages.home )">
+					<mat-icon [class.grow-animation]="toolbarOpen"> home </mat-icon>
+				</button>
 			</section>
 
 			<section class="title-section">
@@ -29,7 +34,7 @@
 				<div *ngIf="user | async; then signedInTemplate; else guestTemplate"></div>
 				<ng-template #signedInTemplate>
 					<div class="flex-vertical flex-center-center">
-						<button mat-icon-button color="primary"
+						<button mat-icon-button [color]="toolbarOpen ? 'primary' : null"
 							class="profile-button"
 							(click)="goto( pages.profile )">
 							<mat-icon [class.grow-animation]="toolbarOpen"> account_circle </mat-icon>
@@ -58,11 +63,6 @@
 		<div class="nav-link" (click)="goto( pages.tag )"> Tags </div>
 		<div class="nav-link" (click)="goto( pages.customization )"> Customization </div>
 		<div class="nav-link" (click)="goto( pages.settings )"> Settings </div>
-		<!-- <button mat-icon-button
-			class="nav-link"
-			(click)="goto( pages.settings )">
-			<mat-icon> settings </mat-icon>
-		</button> -->
 	</div>
 
 </mat-expansion-panel>

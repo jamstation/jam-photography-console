@@ -5,7 +5,11 @@ export const enum SettingsActionTypes
 {
 	modify = '[Settings] modify',
 	modified = '[Settings] modified',
-	modifyFailed = '[Settings] modify failed'
+	modifyFailed = '[Settings] modify failed',
+	shutdownCompany = '[Settings] shutdownCompany',
+	shutdownCompanySuccess = '[Settings] shutdownCompanySuccess',
+	shutdownCompanyFailed = '[Settings] shutdownCompanyFailed',
+	shutdownCompanyCancelled = '[Settings] shutdownCompanyCancelled'
 }
 
 export namespace SettingsAction
@@ -29,9 +33,37 @@ export namespace SettingsAction
 		constructor () { }
 	}
 
+	export class ShutdownCompany implements Action
+	{
+		public readonly type = SettingsActionTypes.shutdownCompany;
+		constructor () { }
+	}
+
+	export class ShutdownCompanySuccess implements Action
+	{
+		public readonly type = SettingsActionTypes.shutdownCompanySuccess;
+		constructor () { }
+	}
+
+	export class ShutdownCompanyFailed implements Action
+	{
+		public readonly type = SettingsActionTypes.shutdownCompanyFailed;
+		constructor () { }
+	}
+
+	export class ShutdownCompanyCancelled implements Action
+	{
+		public readonly type = SettingsActionTypes.shutdownCompanyCancelled;
+		constructor () { }
+	}
+
 	export type All
 		= Modify
 		| Modified
 		| ModifyFailed
+		| ShutdownCompany
+		| ShutdownCompanySuccess
+		| ShutdownCompanyFailed
+		| ShutdownCompanyCancelled
 		;
 }

@@ -1,0 +1,41 @@
+.title {
+	display: flex !important;
+}
+
+mat-dialog-content {
+	margin-top: 10px;
+}
+
+.form-row {
+	margin-top: 20px;
+	display: flex;
+	align-items: baseline;
+}
+
+.form-label {
+	width: 150px;
+	min-width: 100px;
+}
+
+.form-element {
+	max-width: 500px;
+}
+
+.form-element > mat-form-field {
+	min-width: 300px;
+}
+
+.html-form-element {
+	min-width: 300px;
+}
+
+mat-dialog-actions {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+@media ( max-width: 576px ) {
+
+
+
+}

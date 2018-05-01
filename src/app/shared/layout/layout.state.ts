@@ -8,8 +8,6 @@ export interface LayoutModuleState extends AppModuleState
 
 export interface LayoutState
 {
-	initialized: boolean;
 	processing: boolean;
 	list: LayoutItem[];
-	screenSize: ScreenSizes;
 }

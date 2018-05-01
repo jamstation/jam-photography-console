@@ -1,6 +1,6 @@
-import { AppModuleState } from "../../app.store";
+import { CompanyModuleState } from "../company";
 
-export interface SettingsModuleState extends AppModuleState
+export interface SettingsModuleState extends CompanyModuleState
 {
 	settingsState: SettingsState
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { KeyValue } from '../../model-library';
@@ -16,7 +16,7 @@ export class JamTextBoxDialogComponent implements OnInit
 
 	constructor (
 		@Inject( MAT_DIALOG_DATA ) public data: JamTextBoxDialogData,
-		private dialogRef: MatDialogRef<JamTextBoxDialogComponent, KeyValue>
+		private dialog: MatDialogRef<JamTextBoxDialogComponent, KeyValue>
 	) { }
 
 	ngOnInit (): void
@@ -36,7 +36,7 @@ export class JamTextBoxDialogComponent implements OnInit
 				value: value
 			};
 
-		this.dialogRef.close( result );
+		this.dialog.close( result );
 	}
 
 }

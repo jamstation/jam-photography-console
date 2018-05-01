@@ -5,6 +5,7 @@ import { DatabaseState, DatabaseReducer, DatabaseEffects } from "./../jam/firest
 import { NavigatorState, NavigatorReducer, NavigatorEffects } from "./../jam/navigator";
 import { NotificationState, NotificationReducer, NotificationEffects } from "./../jam/notification";
 import { AuthState, AuthReducer, AuthEffects } from "./../jam/auth";
+import { JamLayoutState, JamLayoutReducer, JamLayoutEffects } from "../jam/layout";
 
 /**
  * All States
@@ -16,6 +17,7 @@ export interface AppModuleState
 	navigatorState: NavigatorState;
 	notificationState: NotificationState;
 	authState: AuthState;
+	jamLayoutState: JamLayoutState
 }
 
 /**
@@ -27,6 +29,7 @@ export const AppReducer: ActionReducerMap<AppModuleState> = {
 	navigatorState: NavigatorReducer,
 	notificationState: NotificationReducer,
 	authState: AuthReducer,
+	jamLayoutState: JamLayoutReducer
 }
 
 /**
@@ -37,5 +40,6 @@ export const AppEffects = [
 	DatabaseEffects,
 	NavigatorEffects,
 	NotificationEffects,
-	AuthEffects
+	AuthEffects,
+	JamLayoutEffects
 ]

@@ -9,6 +9,7 @@ export interface HomeModuleState extends AppModuleState
 export interface HomeState
 {
 	processing: boolean;
+	creating: boolean;
 	list: UserCompany[];
 	selectedItem: UserCompany;
 }

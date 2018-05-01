@@ -73,7 +73,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
 
     public query ( queryFn: QueryFn ): Observable<T[]>
     {
-        if ( !this.suppressConsoleMessages ) console.log( '[Database]', '(Table: ' + this.path + ') query -' );
+        if ( !this.suppressConsoleMessages ) console.log( '[Database]', '(Table: ' + this.path + ') query' );
         return this.db
             .collection<T>( this.path, queryFn )
             .valueChanges();
@@ -93,6 +93,7 @@ export class Table<T extends FirestoreData = FirestoreData> implements TableBase
         return key
             ? this.collection.doc<T>( key ).snapshotChanges().pipe(
                 first(),
+                tap( snapshot => console.log( 'exists - ', snapshot.payload.exists ) ),
                 map( snapshot => snapshot.payload.exists ) )
             : Observable.of( false );
     }
